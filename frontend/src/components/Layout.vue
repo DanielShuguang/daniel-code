@@ -1,12 +1,13 @@
 <script lang="ts" setup>
+import { isDev } from '@/utils/env-tools'
 import BottomStatusBar from './BottomStatusBar.vue'
 import EditorContainer from './EditorContainer.vue'
 import HeaderMenuBar from './HeaderMenuBar/index.vue'
-import LeftToolBar from './LeftToolbar.vue'
+import LeftToolBar from './LeftToolbar/index.vue'
 </script>
 
 <template>
-  <div class="ide-layout">
+  <div class="ide-layout" v-uncontext="!isDev">
     <HeaderMenuBar class="ide-menu-bar" />
     <main class="ide-main-container">
       <LeftToolBar class="left-bar" />

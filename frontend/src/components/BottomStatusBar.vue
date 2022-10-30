@@ -1,13 +1,11 @@
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <template>
-  <footer>
-
-  </footer>
+  <footer class="bottom-toolbar"></footer>
 </template>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.bottom-toolbar {
+  background: var(--bottom-toolbar-background);
+}
 </style>

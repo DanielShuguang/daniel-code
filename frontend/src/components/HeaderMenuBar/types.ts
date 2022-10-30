@@ -1,12 +1,13 @@
 export interface TopMenuButton {
   title: string
-  shortcut: string
-  children: TopMenuItem[]
+  shortcut?: string
+  children: MenuListItem[]
 }
 
-export interface TopMenuItem {
+export interface MenuListItem<C = string> {
   title: string
-  shortcut: string
-  command: string
-  children?: TopMenuItem[]
+  shortcut?: string
+  command?: C
+  type?: number | string
+  children?: MenuListItem[]
 }

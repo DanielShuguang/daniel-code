@@ -11,6 +11,7 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@vscode/codicons": "^0.0.32",
     "@vueuse/core": "^9.4.0",
     "lodash": "npm:lodash-es@^4.17.21",
     "lodash-es": "^4.17.21",
@@ -22,6 +23,8 @@
     "@babel/types": "^7.18.10",
     "@types/lodash-es": "^4.17.6",
     "@vitejs/plugin-vue": "^3.0.3",
+    "@vue/test-utils": "^2.2.1",
+    "jsdom": "^20.0.1",
     "sass": "^1.55.0",
     "typescript": "^4.6.4",
     "vite": "^3.0.7",

@@ -5,7 +5,3 @@
 export function GitLookup() {
   return window['go']['base']['App']['GitLookup']();
 }
-
-export function Greet(arg1) {
-  return window['go']['base']['App']['Greet'](arg1);
-}
