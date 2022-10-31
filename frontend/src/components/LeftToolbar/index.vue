@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { plugins } from './data'
+import Sidebar from './Sidebar.vue'
 import { Plugin } from './types'
 
 const getPluginTitle = (plugin: Plugin) => {
@@ -24,10 +25,14 @@ const getPluginTitle = (plugin: Plugin) => {
       </ul>
       <div class="editor-action-bar"></div>
     </div>
+    <Sidebar />
   </div>
 </template>
 
 <style scoped lang="scss">
+.plugin-toolbar {
+  display: flex;
+}
 .content {
   position: relative;
   display: flex;

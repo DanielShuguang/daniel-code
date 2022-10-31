@@ -11,7 +11,7 @@ func Command(arg ...string) (result string, err error) {
 	c := "-c"
 	// 根据系统设定不同的命令 name
 	if runtime.GOOS == "windows" {
-		name = "cmd"
+		name = "powershell"
 		c = "/C"
 	}
 

@@ -43,6 +43,7 @@ import LeftToolBar from './LeftToolbar/index.vue'
   height: 100%;
 }
 .editor-view {
+  flex: 1;
   height: 100%;
 }
 </style>
