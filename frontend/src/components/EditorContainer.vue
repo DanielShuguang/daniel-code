@@ -1,13 +1,12 @@
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <template>
-  <div>
-
-  </div>
+  <div class="main-editor"></div>
 </template>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.main-editor {
+  width: 100%;
+  height: 100%;
+}
 </style>
