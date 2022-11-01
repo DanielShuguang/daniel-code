@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import DanContextmenu from '../DanContextmenu.vue'
 import DanSplitLine from '../DanSplitLine.vue'
 
 const defaultWidth = 300
@@ -11,14 +12,15 @@ const handleSplitChange = (offset: number) => {
 </script>
 
 <template>
-  <div class="sidebar" :style="{ width: barWidth + 'px' }">
-    <DanSplitLine
-      position="absolute"
-      :default-vector="{ x: 300, y: 0 }"
-      @change="handleSplitChange"
-      @reset-click="barWidth = defaultWidth"
-    />
-  </div>
+  <DanContextmenu class="sidebar" :menus="[]">
+    <div class="sidebar" :style="{ width: barWidth + 'px' }">
+      <DanSplitLine
+        :default-vector="{ x: 300, y: 0 }"
+        @change="handleSplitChange"
+        @reset-click="barWidth = defaultWidth"
+      />
+    </div>
+  </DanContextmenu>
 </template>
 
 <style lang="scss" scoped>

@@ -1,7 +1,10 @@
 <script lang="ts" setup>
+import { usePluginStore } from '@/store'
 import { plugins } from './data'
 import Sidebar from './Sidebar.vue'
 import { Plugin } from './types'
+
+const pluginStore = usePluginStore()
 
 const getPluginTitle = (plugin: Plugin) => {
   const list = [plugin.title]
@@ -10,13 +13,23 @@ const getPluginTitle = (plugin: Plugin) => {
   }
   return list.join('')
 }
+
+const handleClickPlugin = (plugin: Plugin) => {
+  pluginStore.changeActivePlugin(plugin)
+}
 </script>
 
 <template>
   <div class="plugin-toolbar">
     <div class="content">
       <ul class="actions-container">
-        <li class="action-item" v-for="p in plugins" :key="p.title" :title="getPluginTitle(p)">
+        <li
+          :class="['action-item', { active: pluginStore.activePlugin?.pluginKey === p.pluginKey }]"
+          v-for="p in plugins"
+          :key="p.title"
+          :title="getPluginTitle(p)"
+          @click="handleClickPlugin(p)"
+        >
           <a :class="['icon', p.icon]"></a>
           <div v-if="p.badge" class="badge">
             <div class="badge-content"></div>
@@ -89,6 +102,19 @@ const getPluginTitle = (plugin: Plugin) => {
   &.active,
   &:hover {
     color: var(--active-plugin-color);
+  }
+  &.active {
+    position: relative;
+    &::before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: block;
+      content: ' ';
+      width: 2px;
+      height: 48px;
+      background: var(--active-plugin-color);
+    }
   }
 }
 .editor-action-bar {

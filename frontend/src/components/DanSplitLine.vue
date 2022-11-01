@@ -8,14 +8,14 @@ const props = withDefaults(
   defineProps<{
     /** @default 'vertical' */
     direction?: 'vertical' | 'horizontal'
-    /** @default 'fixed' */
+    /** @default 'absolute' */
     position: CSSProperties['position']
     defaultVector: Vector2D
     delay?: number
     reset?: boolean
   }>(),
   {
-    position: 'fixed',
+    position: 'absolute',
     direction: 'vertical',
     delay: 0,
     reset: true

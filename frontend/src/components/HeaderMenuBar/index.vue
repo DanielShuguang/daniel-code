@@ -97,7 +97,7 @@ watchEffect(() => {
       <div
         v-for="ctr of correctControls"
         :key="ctr.icon"
-        :class="['window-icon', ctr.icon]"
+        :class="['window-icon', ctr.type, ctr.icon]"
         @click="windowControl(ctr.type)"
       ></div>
     </div>
@@ -188,6 +188,13 @@ watchEffect(() => {
     &::before {
       height: 16px;
       line-height: 16px;
+    }
+    &:hover {
+      background: var(--active-window-control-color);
+      &.close {
+        color: var(--active-item-font-color);
+        background: var(--close-window-control-color);
+      }
     }
   }
 }

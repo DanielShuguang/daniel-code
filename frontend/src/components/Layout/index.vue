@@ -1,9 +1,13 @@
 <script lang="ts" setup>
 import { isDev } from '@/utils/env-tools'
-import BottomStatusBar from './BottomStatusBar.vue'
-import EditorContainer from './EditorContainer.vue'
-import HeaderMenuBar from './HeaderMenuBar/index.vue'
-import LeftToolBar from './LeftToolbar/index.vue'
+import BottomStatusBar from '../BottomStatusBar.vue'
+import EditorContainer from '../EditorContainer.vue'
+import HeaderMenuBar from '../HeaderMenuBar/index.vue'
+import LeftToolBar from '../LeftToolbar/index.vue'
+import { useInitEditorInfo, useWindowsFocusHandler } from './composition'
+
+useWindowsFocusHandler()
+useInitEditorInfo()
 </script>
 
 <template>

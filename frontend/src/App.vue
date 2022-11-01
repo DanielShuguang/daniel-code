@@ -1,18 +1,5 @@
 <script lang="ts" setup>
-import { onBeforeMount } from 'vue'
-import Layout from './components/Layout.vue'
-import { useBaseStore } from './store'
-
-const baseStore = useBaseStore()
-
-onBeforeMount(() => {
-  window.onblur = () => {
-    baseStore.$patch({ isWindowActive: false })
-  }
-  window.onfocus = () => {
-    baseStore.$patch({ isWindowActive: true })
-  }
-})
+import Layout from './components/Layout/index.vue'
 </script>
 
 <template>

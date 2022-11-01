@@ -1,4 +1,5 @@
 import { isDev } from './env-tools'
+import { logger } from './logger'
 
 export class EventBus {
   private eventList: Map<string | symbol, Function>
@@ -19,7 +20,7 @@ export class EventBus {
     if (fn) {
       return fn(...args)
     } else if (isDev) {
-      console.warn(`warning: event "${String(event)}" is unregistered.`)
+      logger.warn(`warning: event "${String(event)}" is unregistered.`)
     }
   }
 

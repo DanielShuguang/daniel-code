@@ -1,8 +1,8 @@
-import { Definable } from '@/types/common'
+import { Nullable } from '@/types/common'
 import { Directive } from 'vue'
 
 // 设置是否可拖拽窗口
-export const windrag: Directive<HTMLElement, Definable<boolean>> = {
+export const windrag: Directive<HTMLElement, Nullable<boolean>> = {
   mounted(el, binding) {
     const isDrag = binding.value ?? true
     if (isDrag) {
