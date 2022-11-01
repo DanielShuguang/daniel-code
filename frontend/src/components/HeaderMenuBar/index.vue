@@ -76,7 +76,7 @@ watchEffect(() => {
           :class="['menubar-menu-button', { active: activeMenu === menu.title }]"
           role="menuitem"
           tabindex="-1"
-          @click="handleClickMenu(menu, $event)"
+          @click.left="handleClickMenu(menu, $event)"
           @mouseenter="isActive && handleClickMenu(menu, $event)"
         >
           <div class="menubar-menu-title">{{ menu.title }}({{ menu.shortcut }})</div>
@@ -88,7 +88,7 @@ watchEffect(() => {
         class="window-title"
         ref="titleDom"
         :style="{ left: `calc(50% - ${titleWidth / 2}px)` }"
-        @dblclick="windowControl('max')"
+        @dblclick.left="windowControl('max')"
       >
         {{ windowTitle }}
       </div>
@@ -98,7 +98,7 @@ watchEffect(() => {
         v-for="ctr of correctControls"
         :key="ctr.icon"
         :class="['window-icon', ctr.type, ctr.icon]"
-        @click="windowControl(ctr.type)"
+        @click.left="windowControl(ctr.type)"
       ></div>
     </div>
   </header>

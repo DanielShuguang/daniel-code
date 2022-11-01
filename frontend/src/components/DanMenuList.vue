@@ -96,7 +96,7 @@ export default {
     <template v-for="(menu, i) in list" :key="menu.title">
       <div
         :class="['menu-list-item', { active: hoverItem === menu.title }]"
-        @click="handleClickMenu(menu)"
+        @click.left="handleClickMenu(menu)"
         @mouseenter="handleHover(menu, $event)"
       >
         <span class="title">{{ menu.title }}</span>

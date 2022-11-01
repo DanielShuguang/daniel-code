@@ -98,8 +98,8 @@ onMounted(() => {
     :style="rootStyle"
     @mouseenter="handleEnter"
     @mouseleave="handleLeave"
-    @mousedown="isDragging = true"
-    @dblclick="handleReset"
+    @mousedown.left="isDragging = true"
+    @dblclick.left="handleReset"
   ></div>
 </template>
 
