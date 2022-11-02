@@ -1,4 +1,3 @@
-import { Nullable } from '@/types/common'
 import { isDev } from '@/utils/env-tools'
 import { logger } from '@/utils/logger'
 import { TopMenuCommands } from './top-menu'
@@ -35,7 +34,7 @@ export class CommandSerivce {
   execCommand = async <E extends keyof CommandTypes>(
     cmd: E,
     ...args: Parameters<CommandTypes[E]>
-  ): Promise<Nullable<ReturnType<CommandTypes[E]>>> => {
+  ): Promise<ReturnType<CommandTypes[E]> | void> => {
     const fn = this.commands.get(cmd)
     if (fn) {
       return fn(...args)

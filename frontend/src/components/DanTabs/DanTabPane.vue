@@ -4,8 +4,8 @@ import { inject } from 'vue'
 import { ActiveTabKey, DestroyTabKey } from './data'
 
 defineProps<{
-  tab: string
-  key: KeyTypes
+  label: string
+  name: KeyTypes
 }>()
 
 const activeTab = inject(ActiveTabKey)
@@ -20,8 +20,8 @@ export default {
 
 <template>
   <div
-    v-show="activeTab === key"
-    v-if="!destroyInactiveTabPane || activeTab === key"
+    v-show="activeTab === name"
+    v-if="!destroyInactiveTabPane || activeTab === name"
     class="dan-tab-pane"
   >
     <div class="tab-pane-content">
