@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { execCommand } from '@/commands'
+import { commandSerivce } from '@/commands'
 import { Vector2D } from '@/types/common'
 import { codicon } from '@/utils/codicon'
 import { useEventListener } from '@vueuse/core'
@@ -68,7 +68,7 @@ const handleClickMenu = (menu: MenuListItem) => {
     return
   }
 
-  execCommand(menu.command as any)
+  commandSerivce.execCommand(menu.command as any)
   emit('close')
 }
 

@@ -12,6 +12,7 @@ export interface LocalStorageKeys {
   'active-project': ProjectInfo
   'active-file': FileInfo
   'open-files': FileInfo[]
+  'editor-theme': string
 }
 
 /**

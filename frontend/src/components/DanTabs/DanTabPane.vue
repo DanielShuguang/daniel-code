@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { KeyTypes } from '@/types/common'
-import { inject, ref } from 'vue'
-import { ActiveTabKey, ChangeTabKey } from './data'
+import { inject } from 'vue'
+import { ActiveTabKey, DestroyTabKey } from './data'
 
 defineProps<{
   tab: string
   key: KeyTypes
 }>()
 
-const activeTab = inject(ActiveTabKey, ref(''))
-const changeTab = inject(ChangeTabKey, () => {})
+const activeTab = inject(ActiveTabKey)
+const destroyInactiveTabPane = inject(DestroyTabKey)
 </script>
 
 <script lang="ts">
@@ -19,7 +19,11 @@ export default {
 </script>
 
 <template>
-  <div class="dan-tab-pane" @click.left="changeTab(key)">
+  <div
+    v-show="activeTab === key"
+    v-if="!destroyInactiveTabPane || activeTab === key"
+    class="dan-tab-pane"
+  >
     <div class="tab-pane-content">
       <slot></slot>
     </div>

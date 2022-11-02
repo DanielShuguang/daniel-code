@@ -8,3 +8,5 @@ export interface Vector2D {
 }
 
 export type KeyTypes = string | number
+
+export type Dict<K extends string | number | symbol, V = any> = Record<K, V | undefined>

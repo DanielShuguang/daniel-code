@@ -56,3 +56,13 @@ export const useInitEditorInfo = () => {
     initPlugin()
   })
 }
+
+/** 初始化编辑器主题 */
+export const useInitEditorTheme = () => {
+  const baseStore = useBaseStore()
+
+  onBeforeMount(() => {
+    const theme = codeLocalStorage.get('editor-theme')
+    baseStore.changeTheme(theme ?? 'default-dark')
+  })
+}

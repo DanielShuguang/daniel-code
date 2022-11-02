@@ -1,45 +1,56 @@
-import { EventBus } from '@/utils/event-bus'
+import { Nullable } from '@/types/common'
+import { isDev } from '@/utils/env-tools'
+import { logger } from '@/utils/logger'
 import { TopMenuCommands } from './top-menu'
 
 export type CommandTypes = TopMenuCommands
 
-const emitter = new EventBus()
+export class CommandSerivce {
+  private static instance: CommandSerivce
+  static getInstance = () => {
+    if (!CommandSerivce.instance) {
+      CommandSerivce.instance = new CommandSerivce()
+    }
+    return CommandSerivce.instance
+  }
 
-export type ExecCommandFn = <E extends keyof CommandTypes>(
-  event: E,
-  ...args: Parameters<CommandTypes[E]>
-) => Promise<ReturnType<CommandTypes[E]>>
+  private commands: Map<string | symbol, Function> = new Map()
 
-export type RegisterCommandFn = <E extends keyof CommandTypes>(
-  event: E,
-  fn: CommandTypes[E]
-) => void
+  /**
+   * 命令集合服务（一个on响应多个emit，有返回值）
+   */
+  private constructor() {}
 
-/**
- * 执行触发事件
- * @param event
- * @param args
- * @returns
- */
-export const execCommand: ExecCommandFn = async (event, ...args) => {
-  return emitter.emit(event, ...args)
+  registerCommand = <E extends keyof CommandTypes>(cmd: E, fn: CommandTypes[E]) => {
+    if (this.commands.has(cmd)) {
+      logger.warn(
+        `warning: command ${cmd} has been registered, this operation will not take effect.`
+      )
+      return false
+    }
+    this.commands.set(cmd, fn)
+    return true
+  }
+
+  execCommand = async <E extends keyof CommandTypes>(
+    cmd: E,
+    ...args: Parameters<CommandTypes[E]>
+  ): Promise<Nullable<ReturnType<CommandTypes[E]>>> => {
+    const fn = this.commands.get(cmd)
+    if (fn) {
+      return fn(...args)
+    } else if (isDev) {
+      logger.warn(`warning: command "${String(cmd)}" is unregistered.`)
+    }
+  }
+
+  unregisterCommand = (event: keyof CommandTypes, fn?: Function) => {
+    this.commands.delete(event)
+  }
+
+  unregisterAll = () => {
+    this.commands.clear()
+  }
 }
 
-/**
- * 注册事件
- * @param event
- * @param fn
- */
-export const registerCommand: RegisterCommandFn = (event, fn) => {
-  emitter.on(event, fn)
-}
-
-/**
- * 注销事件
- * @param events
- */
-export const unregisterCommand = (...events: (keyof CommandTypes)[]) => {
-  events.forEach(ev => {
-    emitter.off(ev)
-  })
-}
+export const commandSerivce = CommandSerivce.getInstance()

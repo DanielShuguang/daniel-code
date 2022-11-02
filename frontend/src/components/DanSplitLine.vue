@@ -9,7 +9,7 @@ const props = withDefaults(
     /** @default 'vertical' */
     direction?: 'vertical' | 'horizontal'
     /** @default 'absolute' */
-    position: CSSProperties['position']
+    position?: CSSProperties['position']
     defaultVector: Vector2D
     delay?: number
     reset?: boolean
