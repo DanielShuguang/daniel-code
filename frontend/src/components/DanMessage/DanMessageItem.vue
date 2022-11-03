@@ -2,10 +2,10 @@
 import { codicon } from '@/utils/codicon'
 import { TimeUtils } from '@/utils/time-utils'
 import { onMounted } from 'vue'
-import { MessageItem } from './types'
+import { MessageOption } from './types'
 
 const props = defineProps<{
-  messageOpt: MessageItem
+  messageOpt: MessageOption
 }>()
 const emit = defineEmits<{
   (event: 'close'): void

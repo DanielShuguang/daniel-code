@@ -7,6 +7,7 @@ import DanTabPane from './DanTabs/DanTabPane.vue'
 import DanTabs from './DanTabs/index.vue'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js'
 import { isFileInfo } from '@/utils/type-check'
+import { messageSerivce } from './DanMessage/composition'
 
 const fileStore = useFileSystemStore()
 
@@ -29,7 +30,7 @@ const handleChangeTab = async (key: KeyTypes) => {
           editor.content = [result.content ?? '']
         }
       } else {
-        // TODO 读取错误提示消息
+        messageSerivce({ type: 'error', message: result.errorMessage })
         return
       }
     } else if (!isFileInfo(editor)) {

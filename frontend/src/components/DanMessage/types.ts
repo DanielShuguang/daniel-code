@@ -4,8 +4,9 @@ export interface MessageOption {
   timeout?: number
   reasons?: string[]
   closable?: boolean
-}
-
-export interface MessageItem extends MessageOption {
+  /**
+   * 点击按钮后的回调
+   * @param reason 点击按钮的文字内容
+   */
   callback?: (reason: string) => void
 }

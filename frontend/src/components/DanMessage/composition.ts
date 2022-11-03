@@ -1,6 +1,6 @@
 import { commandSerivce } from '@/commands'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { MessageItem, MessageOption } from './types'
+import { MessageOption } from './types'
 import { nanoid } from 'nanoid'
 import { TimeUtils } from '@/utils/time-utils'
 
@@ -8,21 +8,20 @@ import { TimeUtils } from '@/utils/time-utils'
  * 推送右下角弹出消息
  * @param opt 消息设置
  */
-export const messageSerivce = (opt: MessageOption, callback?: (reason: string) => void) => {
-  return commandSerivce.execCommand('dan-code-message', opt, callback)
+export const messageSerivce = (opt: MessageOption) => {
+  return commandSerivce.execCommand('dan-code-message', opt)
 }
 
 export const useMessageEvents = () => {
-  const messageList = ref(new Map<string, MessageItem>())
+  const messageList = ref(new Map<string, MessageOption>())
 
   onMounted(() => {
-    commandSerivce.registerCommand('dan-code-message', (opt, callback) => {
+    commandSerivce.registerCommand('dan-code-message', opt => {
       const key = nanoid()
       messageList.value.set(key, {
         ...opt,
         closable: opt.closable ?? true,
-        timeout: opt.timeout ?? 3 * TimeUtils.SECOND,
-        callback
+        timeout: opt.timeout ?? 3 * TimeUtils.SECOND
       })
     })
   })
