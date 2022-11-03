@@ -49,8 +49,8 @@ const windowTitle = computed(() => {
   if (projectStore.currentProject) {
     titleList.unshift(projectStore.currentProject.name)
   }
-  if (fileStore.currentFile) {
-    titleList.unshift(fileStore.currentFile.name)
+  if (fileStore.currentEditor) {
+    titleList.unshift(fileStore.currentEditor.name)
   }
   if (titleList.length === 1) {
     titleList.unshift('开始')

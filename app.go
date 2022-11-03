@@ -1,10 +1,10 @@
 package main
 
 import (
-	"changeme/backend/base"
+	"changeme/backend/core"
 )
 
 // NewApp creates a new App application struct
-func NewApp() *base.App {
-	return &base.App{}
+func NewApp() *core.App {
+	return &core.App{}
 }

@@ -5,7 +5,7 @@ import { ActiveTabKey, DestroyTabKey } from './data'
 
 defineProps<{
   label: string
-  name: KeyTypes
+  tabKey: KeyTypes
 }>()
 
 const activeTab = inject(ActiveTabKey)
@@ -13,15 +13,16 @@ const destroyInactiveTabPane = inject(DestroyTabKey)
 </script>
 
 <script lang="ts">
+export const componentName = 'dan-tab-pane'
 export default {
-  name: 'dan-tab-pane'
+  name: componentName
 }
 </script>
 
 <template>
   <div
-    v-show="activeTab === name"
-    v-if="!destroyInactiveTabPane || activeTab === name"
+    v-show="activeTab === tabKey"
+    v-if="!destroyInactiveTabPane || activeTab === tabKey"
     class="dan-tab-pane"
   >
     <div class="tab-pane-content">

@@ -3,6 +3,7 @@ import { Dict, KeyTypes } from '@/types/common'
 import { codicon } from '@/utils/codicon'
 import { isObject } from 'lodash-es'
 import { provide, readonly, ref, toRefs, useSlots, watchEffect } from 'vue'
+import { componentName } from './DanTabPane.vue'
 import { ActiveTabKey, DestroyTabKey } from './data'
 import { TabItem } from './types'
 
@@ -17,6 +18,7 @@ const props = withDefaults(
 )
 const emit = defineEmits<{
   (event: 'update:modelValue', val: KeyTypes): void
+  (event: 'close-tab', val: KeyTypes): void
   (event: 'change', val: KeyTypes): void
 }>()
 const { modelValue, destroyInactiveTabPane } = toRefs(props)
@@ -39,12 +41,12 @@ watchEffect(() => {
     const list: TabItem[] = []
     children.forEach(child => {
       const { type } = child
-      if (isObject(type) && 'name' in type && type.name === 'dan-tab-pane') {
-        const { name, label } = child.props as Dict<string, string>
-        name &&
+      if (isObject(type) && 'name' in type && type.name === componentName) {
+        const { tabKey, label } = child.props as Dict<string, string>
+        tabKey &&
           list.push({
-            label: label || name,
-            name
+            label: label || tabKey,
+            tabKey
           })
       }
     })
@@ -58,16 +60,17 @@ watchEffect(() => {
     <div :class="['tabs-header-holder', { 'card-tabs': type }]">
       <div
         v-for="tab in tabList"
-        :key="tab.name"
-        :class="['tab-item', { 'card-tab': type }, { 'is-active': modelValue === tab.name }]"
-        @click.left="handleChangeActiveTab(tab.name)"
+        :key="tab.tabKey"
+        :class="['tab-item', { 'card-tab': type }, { 'is-active': modelValue === tab.tabKey }]"
+        @click.left="handleChangeActiveTab(tab.tabKey)"
       >
         <slot name="tab-render" :="tab">
           <span class="tab-title">{{ tab.label }}</span>
         </slot>
         <a
           v-if="closable"
-          :class="['tab-close', codicon('close'), { 'show-icon': modelValue === tab.name }]"
+          :class="['tab-close', codicon('close'), { 'show-icon': modelValue === tab.tabKey }]"
+          @click.left="$emit('close-tab', tab.tabKey)"
         ></a>
       </div>
     </div>

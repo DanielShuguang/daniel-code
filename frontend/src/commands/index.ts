@@ -1,8 +1,9 @@
 import { isDev } from '@/utils/env-tools'
 import { logger } from '@/utils/logger'
+import { MessageCommands } from './message'
 import { TopMenuCommands } from './top-menu'
 
-export type CommandTypes = TopMenuCommands
+export type CommandTypes = TopMenuCommands & MessageCommands
 
 export class CommandSerivce {
   private static instance: CommandSerivce

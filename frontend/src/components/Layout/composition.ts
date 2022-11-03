@@ -1,5 +1,7 @@
 import { useBaseStore, useFileSystemStore, usePluginStore, useProjectSystemStore } from '@/store'
+import { FileInfo, GenericContainer } from '@/types/file-system'
 import { codeLocalStorage } from '@/utils/storage'
+import { isFileInfo } from '@/utils/type-check'
 import { onBeforeMount, onMounted } from 'vue'
 import { plugins } from '../LeftToolbar/data'
 
@@ -36,18 +38,25 @@ export const useInitEditorInfo = () => {
     }
     initFile(!!activeProject)
   }
-  /** 初始化上一次打开的文件 */
+  /**
+   * 初始化上一次打开的文件
+   * @param isProject 上次开启时是否为项目工程
+   */
   const initFile = (isProject: boolean) => {
-    const activeFile = codeLocalStorage.get('active-file')
-    const openFiles = codeLocalStorage.get('open-files')
-    if (activeFile) {
-      if (!activeFile.isProject || isProject) {
-        fileStore.changeCurrentFile(activeFile)
-      }
+    const openedEditors = codeLocalStorage.get('opened-editors')
 
-      if (openFiles?.length && (!openFiles?.[0].isProject || isProject)) {
-        fileStore.changeOpenFiles(...openFiles)
+    const editors: Array<FileInfo | GenericContainer> = []
+    const shouldOpen = openedEditors?.every(ed => {
+      if (isFileInfo(ed) && ed.isProject && !isProject) {
+        return false
       }
+      editors.push(ed)
+      return true
+    })
+    if (shouldOpen) {
+      fileStore.changeOpenEditors(...editors)
+      const activeFile = codeLocalStorage.get('active-editor')
+      activeFile && fileStore.changeCurrentEditor(activeFile)
     }
   }
 
