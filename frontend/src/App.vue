@@ -7,6 +7,8 @@ import Layout from './components/Layout/index.vue'
 </template>
 
 <style>
+html,
+body,
 #app {
   height: 100vh;
   width: 100vw;
