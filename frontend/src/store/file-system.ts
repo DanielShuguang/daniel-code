@@ -11,16 +11,12 @@ export const useFileSystemStore = defineStore('file-system', {
     openEditors: <Array<FileInfo | GenericContainer>>[]
   }),
   actions: {
-    changeCurrentEditor(file: FileInfo | GenericContainer) {
-      this.currentEditor = cloneDeep(file)
-      codeLocalStorage.set('active-editor', file)
-    },
-    changeOpenEditors(...files: Array<FileInfo | GenericContainer>) {
-      this.openEditors.push(...cloneDeep(files))
-      codeLocalStorage.set(
-        'opened-editors',
-        this.openEditors.map(e => (isFileInfo(e) ? { ...e, content: [] } : e))
+    changeCurrentEditor(editor: Nullable<Omit<FileInfo, 'content'> | GenericContainer>) {
+      const result = cloneDeep(
+        isFileInfo(editor) && editor.content ? omit(editor, ['content']) : editor
       )
+      this.currentEditor = result
+      codeLocalStorage.set('active-editor', result)
     }
   }
 })

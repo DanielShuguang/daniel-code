@@ -31,4 +31,10 @@ export default {
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.dan-tab-pane,
+.tab-pane-content {
+  width: 100%;
+  height: 100%;
+}
+</style>

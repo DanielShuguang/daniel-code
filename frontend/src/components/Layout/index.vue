@@ -4,11 +4,17 @@ import BottomStatusBar from '../BottomStatusBar.vue'
 import EditorContainer from '../EditorContainer.vue'
 import HeaderMenuBar from '../HeaderMenuBar/index.vue'
 import LeftToolBar from '../LeftToolbar/index.vue'
-import { useInitEditorInfo, useInitEditorTheme, useWindowsFocusHandler } from './composition'
+import {
+  useInitEditorInfo,
+  useInitEditorTheme,
+  useUpdateEditorsStorage,
+  useWindowsFocusHandler
+} from './composition'
 
 useWindowsFocusHandler()
 useInitEditorInfo()
 useInitEditorTheme()
+useUpdateEditorsStorage()
 </script>
 
 <template>

@@ -2,7 +2,7 @@ import { useBaseStore, useFileSystemStore, usePluginStore, useProjectSystemStore
 import { FileInfo, GenericContainer } from '@/types/file-system'
 import { codeLocalStorage } from '@/utils/storage'
 import { isFileInfo } from '@/utils/type-check'
-import { onBeforeMount, onMounted } from 'vue'
+import { onBeforeMount, onMounted, watch } from 'vue'
 import { plugins } from '../LeftToolbar/data'
 
 /** 响应窗口失焦、聚焦状态 */
@@ -54,7 +54,7 @@ export const useInitEditorInfo = () => {
       return true
     })
     if (shouldOpen) {
-      fileStore.changeOpenEditors(...editors)
+      fileStore.$patch(state => state.openEditors.push(...editors))
       const activeFile = codeLocalStorage.get('active-editor')
       activeFile && fileStore.changeCurrentEditor(activeFile)
     }
@@ -74,4 +74,19 @@ export const useInitEditorTheme = () => {
     const theme = codeLocalStorage.get('editor-theme')
     baseStore.changeTheme(theme ?? 'default-dark')
   })
+}
+
+export const useUpdateEditorsStorage = () => {
+  const fileStore = useFileSystemStore()
+
+  watch(
+    () => fileStore.openEditors,
+    () => {
+      codeLocalStorage.set(
+        'opened-editors',
+        fileStore.openEditors.map(e => (isFileInfo(e) ? { ...e, content: [] } : e))
+      )
+    },
+    { deep: true }
+  )
 }

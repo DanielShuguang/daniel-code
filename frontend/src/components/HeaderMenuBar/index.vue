@@ -5,12 +5,13 @@ import { onClickOutside } from '@vueuse/core'
 import { cloneDeep } from 'lodash-es'
 import { computed, ref, watchEffect } from 'vue'
 import DanMenuList, { DanMenuListProps } from '../DanMenuList.vue'
-import { useMovingWindowTitle, useWindowControllers } from './composition'
+import { useMenusCommands, useMovingWindowTitle, useWindowControllers } from './composition'
 import { topMenus } from './data'
 import { TopMenuButton } from './types'
 
 const { titleDom, titleWidth } = useMovingWindowTitle()
 const { correctControls, windowControl } = useWindowControllers()
+useMenusCommands()
 
 const defualtInfo = {
   list: [],

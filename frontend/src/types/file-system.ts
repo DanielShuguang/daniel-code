@@ -4,7 +4,6 @@ export interface FileInfo {
   key: string
   isProject: boolean
   content: string[]
-  suffix: string
   type: string
   isBinary: boolean
 }

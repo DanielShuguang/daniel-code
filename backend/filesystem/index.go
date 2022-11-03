@@ -2,24 +2,14 @@ package filesystem
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"io"
 	"os"
+	"strings"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
-
-type DirTree struct {
-	Name     string     `json:"name,omitempty"`
-	Path     string     `json:"path,omitempty"`
-	IsDir    bool       `json:"isDir,omitempty"`
-	Type     string     `json:"type,omitempty"`
-	Children []*DirTree `json:"children,omitempty"`
-}
-
-type FileContentResult struct {
-	Content      string `json:"content,omitempty"`
-	ErrorMessage string `json:"errorMessage,omitempty"`
-	IsBinary     bool   `json:"isBinary,omitempty"`
-}
 
 func ReadFileContent(filePath string) FileContentResult {
 	result := FileContentResult{
@@ -27,31 +17,23 @@ func ReadFileContent(filePath string) FileContentResult {
 	}
 	file, err := os.Open(filePath)
 	if err != nil {
-		result.ErrorMessage = err.Error()
+		result.ErrorMessage = fmt.Sprintf("打开文件错误: %s", err.Error())
 		return result
 	}
-	defer file.Close()
 
 	if isBinaryFile(file) {
 		result.IsBinary = true
-		result.ErrorMessage = "this is a binary file"
+		result.ErrorMessage = "该文件为二进制文件"
 		return result
 	}
+	file.Close()
 
-	info, err := file.Stat()
+	content, err := os.ReadFile(filePath)
 	if err != nil {
-		result.ErrorMessage = err.Error()
-		return result
-	}
-
-	content := make([]byte, info.Size())
-	_, err = file.Read(content)
-	if err != nil {
-		result.ErrorMessage = err.Error()
+		result.ErrorMessage = fmt.Sprintf("文件内容读取错误: %s", err.Error())
 		return result
 	}
 	result.Content = string(content)
-	result.ErrorMessage = ""
 	return result
 }
 
@@ -100,4 +82,32 @@ func ReadDirTree(dirTree DirTree) {
 			ReadDirTree(*dirTree.Children[index])
 		}
 	}
+}
+
+func OpenFileByDialog(ctx context.Context) FileDetails {
+	path, err := runtime.OpenFileDialog(ctx, runtime.OpenDialogOptions{})
+	result := FileDetails{Err: ""}
+	if err != nil {
+		result.Err = fmt.Sprintf("打开资源管理器失败: %s", err.Error())
+		return result
+	}
+	file := ReadFileContent(path)
+	var pathList []string
+	if strings.Contains(path, "/") {
+		pathList = strings.Split(path, "/")
+	} else {
+		pathList = strings.Split(path, "\\")
+	}
+	result.IsBinary = file.IsBinary
+	result.Name = pathList[len(pathList)-1]
+	result.Err = file.ErrorMessage
+	result.Content = file.Content
+	result.Path = path
+
+	if strings.Contains(result.Name, ".") {
+		nameList := strings.Split(result.Name, ".")
+		ext := nameList[len(nameList)-1]
+		result.Type = ext
+	}
+	return result
 }

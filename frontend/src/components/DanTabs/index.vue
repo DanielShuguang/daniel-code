@@ -2,7 +2,7 @@
 import { Dict, KeyTypes } from '@/types/common'
 import { codicon } from '@/utils/codicon'
 import { isObject } from 'lodash-es'
-import { provide, readonly, ref, toRefs, useSlots, watchEffect } from 'vue'
+import { provide, readonly, ref, toRefs, useSlots, VNode, watchEffect } from 'vue'
 import { componentName } from './DanTabPane.vue'
 import { ActiveTabKey, DestroyTabKey } from './data'
 import { TabItem } from './types'
@@ -36,16 +36,18 @@ provide(ActiveTabKey, readonly(modelValue))
 provide(DestroyTabKey, readonly(destroyInactiveTabPane))
 
 watchEffect(() => {
-  const children = slots.default?.()
-  if (children) {
+  const defaultSlots = slots.default?.()
+  const children = (defaultSlots?.[0] as any)?.children as VNode[]
+  if (children?.length) {
     const list: TabItem[] = []
     children.forEach(child => {
       const { type } = child
       if (isObject(type) && 'name' in type && type.name === componentName) {
-        const { tabKey, label } = child.props as Dict<string, string>
+        const props = child.props as Dict<string, string>
+        const tabKey = props['tab-key'] || props.tabKey
         tabKey &&
           list.push({
-            label: label || tabKey,
+            label: props.label || tabKey,
             tabKey
           })
       }
@@ -70,7 +72,7 @@ watchEffect(() => {
         <a
           v-if="closable"
           :class="['tab-close', codicon('close'), { 'show-icon': modelValue === tab.tabKey }]"
-          @click.left="$emit('close-tab', tab.tabKey)"
+          @click.left.stop="$emit('close-tab', tab.tabKey)"
         ></a>
       </div>
     </div>

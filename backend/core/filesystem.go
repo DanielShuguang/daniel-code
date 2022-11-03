@@ -23,3 +23,7 @@ func (a *App) ReadDirTree(dirPath string) filesystem.DirTree {
 func (a *App) ReadFileContent(filePath string) filesystem.FileContentResult {
 	return filesystem.ReadFileContent(filePath)
 }
+
+func (a *App) OpenFileByDialog() filesystem.FileDetails {
+	return filesystem.OpenFileByDialog(a.ctx)
+}

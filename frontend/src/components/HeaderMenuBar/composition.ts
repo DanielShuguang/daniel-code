@@ -1,7 +1,9 @@
+import { commandSerivce } from '@/commands'
 import { Nullable } from '@/types/common'
 import { codicon } from '@/utils/codicon'
 import { Quit, WindowIsMaximised, WindowMinimise, WindowToggleMaximise } from 'runtime'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { menuCommands } from './command-handlers'
 
 /** 自适应编辑器标题位置 */
 export const useMovingWindowTitle = () => {
@@ -58,4 +60,14 @@ export const useWindowControllers = () => {
   })
 
   return { controls, isMaximise, correctControls, windowControl }
+}
+
+export const useMenusCommands = () => {
+  onMounted(() => {
+    menuCommands()
+  })
+
+  onUnmounted(() => {
+    commandSerivce.unregisterAll()
+  })
 }

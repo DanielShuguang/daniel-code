@@ -1,10 +1,10 @@
 export namespace filesystem {
 	
 	export class DirTree {
-	    name?: string;
-	    path?: string;
-	    isDir?: boolean;
-	    type?: string;
+	    name: string;
+	    path: string;
+	    isDir: boolean;
+	    type: string;
 	    children?: DirTree[];
 	
 	    static createFrom(source: any = {}) {
@@ -41,7 +41,7 @@ export namespace filesystem {
 	export class FileContentResult {
 	    content?: string;
 	    errorMessage?: string;
-	    isBinary?: boolean;
+	    isBinary: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new FileContentResult(source);
@@ -52,6 +52,28 @@ export namespace filesystem {
 	        this.content = source["content"];
 	        this.errorMessage = source["errorMessage"];
 	        this.isBinary = source["isBinary"];
+	    }
+	}
+	export class FileDetails {
+	    name: string;
+	    path: string;
+	    content: string;
+	    err?: string;
+	    isBinary: boolean;
+	    type?: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new FileDetails(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.path = source["path"];
+	        this.content = source["content"];
+	        this.err = source["err"];
+	        this.isBinary = source["isBinary"];
+	        this.type = source["type"];
 	    }
 	}
 

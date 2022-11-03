@@ -10,7 +10,7 @@ export interface SessionStorageKeys {}
 export interface LocalStorageKeys {
   'active-plugin': Plugin
   'active-project': ProjectInfo
-  'active-editor': FileInfo | GenericContainer
+  'active-editor': Nullable<Omit<FileInfo, 'content'> | GenericContainer>
   'opened-editors': Array<FileInfo | GenericContainer>
   'editor-theme': string
 }
