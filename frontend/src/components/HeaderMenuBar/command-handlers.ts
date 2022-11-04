@@ -9,7 +9,7 @@ export const menuCommands = () => {
     const fileStore = useFileSystemStore()
     const result = await OpenFileByDialog()
     const existFile = fileStore.openEditors.find(
-      editor => isFileInfo(editor) && result.path === result.path
+      editor => isFileInfo(editor) && editor.path === result.path
     )
     if (!result.err && !existFile) {
       const file: FileInfo = {
@@ -19,7 +19,7 @@ export const menuCommands = () => {
         isProject: false,
         key: result.path,
         path: result.path,
-        type: result.type ?? ''
+        type: result.type ?? 'txt'
       }
       fileStore.$patch(state => state.openEditors.push(file))
       fileStore.changeCurrentEditor(file)

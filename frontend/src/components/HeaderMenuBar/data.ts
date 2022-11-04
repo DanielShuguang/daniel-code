@@ -7,7 +7,7 @@ export const fileMenus: MenuListItem<keyof FileMenuCommands>[] = [
   { title: '新建窗口', command: 'topmenu-add-window', type: 1, shortcut: 'Ctrl+Shift+N' },
 
   { title: '打开文件', command: 'topmenu-open-file', type: 2, shortcut: 'Ctrl+O' },
-  { title: '打开文件夹', command: 'topmenu-open-folder', type: 2, shortcut: 'Ctrl+K Ctrl+O' },
+  { title: '打开文件夹', command: 'topmenu-open-folder', type: 2, shortcut: 'Ctrl+K+O' },
   {
     title: '打开最近的文件',
     type: 2,
@@ -19,14 +19,14 @@ export const fileMenus: MenuListItem<keyof FileMenuCommands>[] = [
 
   { title: '保存', command: 'topmenu-save', type: 3, shortcut: 'Ctrl+S' },
   { title: '另存为...', command: 'topmenu-save-as', type: 3, shortcut: 'Ctrl+Shift+S' },
-  { title: '全部保存', command: 'topmenu-save-all', type: 3, shortcut: 'Ctrl+K S' },
+  { title: '全部保存', command: 'topmenu-save-all', type: 3, shortcut: 'Ctrl+K+S' },
 
   { title: '自动保存', command: 'topmenu-auto-save', type: 4 },
   { title: '首选项', command: 'topmenu-preferences', type: 4, children: [] },
 
   { title: '还原文件', command: 'topmenu-restore-files', type: 5 },
   { title: '关闭编辑器', command: 'topmenu-close-editor', type: 5, shortcut: 'Ctrl+F4' },
-  { title: '关闭文件夹', command: 'topmenu-close-folder', type: 5, shortcut: 'Ctrl+K F' },
+  { title: '关闭文件夹', command: 'topmenu-close-folder', type: 5, shortcut: 'Ctrl+K+F' },
   { title: '关闭窗口', command: 'topmenu-close-window', type: 5, shortcut: 'Alt+F4' },
 
   { title: '退出', command: 'topmenu-exit', type: 6 }

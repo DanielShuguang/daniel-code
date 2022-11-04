@@ -1,9 +1,12 @@
-import { commandSerivce } from '@/commands'
+import { commandSerivce, CommandTypes } from '@/commands'
 import { Nullable } from '@/types/common'
 import { codicon } from '@/utils/codicon'
+import { useMagicKeys, whenever } from '@vueuse/core'
+import { debounce, throttle } from 'lodash-es'
 import { Quit, WindowIsMaximised, WindowMinimise, WindowToggleMaximise } from 'runtime'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { menuCommands } from './command-handlers'
+import { editMenus, fileMenus } from './data'
 
 /** 自适应编辑器标题位置 */
 export const useMovingWindowTitle = () => {
@@ -62,7 +65,26 @@ export const useWindowControllers = () => {
   return { controls, isMaximise, correctControls, windowControl }
 }
 
-export const useMenusCommands = () => {
+/** 初始化菜单命令和快捷键 */
+export const useMenusCommandsShortcuts = () => {
+  const keys = useMagicKeys()
+
+  const menus = [...fileMenus, ...editMenus]
+  menus
+    .flatMap(el => [...(el.children || [])])
+    .forEach(el => {
+      el.shortcut &&
+        whenever(keys[el.shortcut!], v => {
+          if (v) {
+            keyDownHandler(el.command as any)
+          }
+        })
+    })
+
+  const keyDownHandler = debounce((command?: keyof CommandTypes) => {
+    command && commandSerivce.execCommand(command)
+  }, 200)
+
   onMounted(() => {
     menuCommands()
   })

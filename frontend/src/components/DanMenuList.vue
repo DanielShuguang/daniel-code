@@ -3,7 +3,7 @@ import { commandSerivce } from '@/commands'
 import { Vector2D } from '@/types/common'
 import { codicon } from '@/utils/codicon'
 import { useEventListener } from '@vueuse/core'
-import { cloneDeep, throttle } from 'lodash-es'
+import { cloneDeep, debounce } from 'lodash-es'
 import { ref } from 'vue'
 import { MenuListItem } from './HeaderMenuBar/types'
 
@@ -41,7 +41,7 @@ const handleHover = (menu: MenuListItem, ev: MouseEvent) => {
   handleActiveChildMenu(menu, ev)
 }
 
-const handleActiveChildMenu = throttle((menu: MenuListItem, ev: MouseEvent) => {
+const handleActiveChildMenu = debounce((menu: MenuListItem, ev: MouseEvent) => {
   if (!menu.children?.length) {
     activeTarget.value = cloneDeep(defaultActive)
     activeMenu.value.length = 0

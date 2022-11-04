@@ -3,10 +3,14 @@
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import { defineConfig } from 'vite'
+import monaco from 'vite-plugin-monaco-editor'
+
+// 包的默认导出有问题，不可直接使用
+const monacoEditorPlugin: typeof monaco = (monaco as any).default
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), monacoEditorPlugin({})],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

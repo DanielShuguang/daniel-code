@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Nullable, Vector2D } from '@/types/common'
 import { useEventListener } from '@vueuse/core'
-import { cloneDeep, throttle } from 'lodash-es'
+import { cloneDeep, debounce } from 'lodash-es'
 import { computed, CSSProperties, onMounted, ref } from 'vue'
 
 const props = withDefaults(
@@ -81,7 +81,7 @@ const handleReset = (ev: MouseEvent) => {
   emit('resetClick', ev)
 }
 
-const updatePosition = throttle(() => {
+const updatePosition = debounce(() => {
   const { x, y } = moveDistance.value
   emit('change', x + y)
   moveDistance.value = { x: 0, y: 0 }

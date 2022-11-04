@@ -20,7 +20,7 @@ const handleClickPlugin = (plugin: Plugin) => {
 </script>
 
 <template>
-  <div class="plugin-toolbar">
+  <div class="plugin-toolbar" data-code-plugin>
     <div class="content">
       <ul class="actions-container">
         <li

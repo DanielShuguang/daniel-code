@@ -47,6 +47,8 @@ export const useInitEditorInfo = () => {
 
     const editors: Array<FileInfo | GenericContainer> = []
     const shouldOpen = openedEditors?.every(ed => {
+      // 如果上次打开时为项目，则检测是否已激活项目
+      // 如果上次未打开项目，则打开之前已打开的独立文件
       if (isFileInfo(ed) && ed.isProject && !isProject) {
         return false
       }
@@ -54,9 +56,9 @@ export const useInitEditorInfo = () => {
       return true
     })
     if (shouldOpen) {
-      fileStore.$patch(state => state.openEditors.push(...editors))
+      fileStore.$patch(state => (state.openEditors = editors))
       const activeFile = codeLocalStorage.get('active-editor')
-      activeFile && fileStore.changeCurrentEditor(activeFile)
+      fileStore.changeCurrentEditor(activeFile ?? editors[0])
     }
   }
 

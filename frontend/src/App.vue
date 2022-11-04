@@ -13,5 +13,6 @@ body,
   height: 100vh;
   width: 100vw;
   background: var(--editor-background);
+  overflow: hidden;
 }
 </style>

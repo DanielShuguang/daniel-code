@@ -1,29 +1,39 @@
 <script lang="ts" setup>
 import { useFileSystemStore } from '@/store'
 import { KeyTypes, Nullable } from '@/types/common'
-import { computed, nextTick, onMounted, ref, shallowRef, watch } from 'vue'
+import { computed, nextTick, ref, shallowRef, watch } from 'vue'
 import { ReadFileContent } from 'backend/core/App'
-import DanTabPane from './DanTabs/DanTabPane.vue'
-import DanTabs from './DanTabs/index.vue'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js'
+import DanTabPane from '../DanTabs/DanTabPane.vue'
+import DanTabs from '../DanTabs/index.vue'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { isFileInfo } from '@/utils/type-check'
-import { messageSerivce } from './DanMessage/composition'
-import { cloneDeep, pick } from 'lodash-es'
+import { messageSerivce } from '../DanMessage/composition'
+import { cloneDeep } from 'lodash-es'
 import { FileInfo } from '@/types/file-system'
+import { useResizeEditorContainer } from './composition'
+import { langsMap } from '@/utils/language'
+import { useEventListener } from '@vueuse/core'
 
 const fileStore = useFileSystemStore()
 
 const editorRefs = ref<Nullable<HTMLDivElement>[]>([])
 const activeTab = computed(() => fileStore.currentEditor?.key || '')
 const editorContainers = shallowRef(new Map<string, monaco.editor.IStandaloneCodeEditor>())
-const observer = shallowRef<Nullable<ResizeObserver>>(null)
-const mainDomRef = ref<Nullable<HTMLDivElement>>(null)
+
+const { containerRect } = useResizeEditorContainer()
+useEventListener('keydown', ev => {
+  if (ev.ctrlKey && ev.key === 'w' && fileStore.currentEditor?.key) {
+    handleCloseTab(fileStore.currentEditor.key)
+  }
+})
 
 const handleCloseTab = (key: KeyTypes) => {
   const index = fileStore.openEditors.findIndex(el => el.key === key)
   if (index !== -1) {
     const { openEditors } = fileStore
     const key = openEditors[index].key
+    editorContainers.value.get(key)?.dispose()
+    editorContainers.value.delete(key)
     if (key === fileStore.currentEditor?.key) {
       if (openEditors.length === 1) {
         fileStore.changeCurrentEditor(null)
@@ -31,9 +41,6 @@ const handleCloseTab = (key: KeyTypes) => {
         fileStore.changeCurrentEditor(openEditors[index ? index - 1 : 0])
       }
     }
-    editorContainers.value.get(key)?.dispose()
-    editorContainers.value.delete(key)
-    openEditors.splice(index, 1)
     fileStore.$patch(state => state.openEditors.splice(index, 1))
   }
 }
@@ -68,9 +75,10 @@ const renderEditor = (editor: FileInfo) => {
   if (!targetDom || editorContainers.value.has(editor.key)) return
 
   const monacoInstance = monaco.editor.create(targetDom, {
-    language: editor.type,
+    language: langsMap[editor.type] || editor.type,
     value: editor.content.join(''),
-    automaticLayout: true
+    automaticLayout: true,
+    theme: 'vs-dark'
   })
   editorContainers.value.set(editor.key, monacoInstance)
 }
@@ -80,30 +88,14 @@ watch(
   () => nextTick(() => handleChangeTab(fileStore.currentEditor?.key || '')),
   { immediate: true }
 )
-
-onMounted(() => {
-  observer.value = new ResizeObserver(() => {
-    const key = fileStore.currentEditor?.key
-    const rect = editorRefs.value.find(el => el?.dataset.editorKey === key)?.getBoundingClientRect()
-    if (key && rect) {
-      console.log(rect)
-      editorContainers.value.get(key)?.layout(pick(rect, ['width', 'height']))
-    }
-  })
-  mainDomRef.value && observer.value.observe(mainDomRef.value)
-  console.log(mainDomRef.value)
-  window.onresize = () => {
-    console.log('window resize')
-  }
-})
 </script>
 
 <template>
-  <div class="main-editor" ref="mainDomRef">
+  <div class="main-editor">
     <DanTabs
       v-show="fileStore.openEditors.length"
       :model-value="activeTab"
-      style="height: 100%"
+      :style="containerRect"
       type="card"
       closable
       @change="handleChangeTab"
@@ -123,13 +115,15 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .main-editor {
+  position: relative;
   width: 100%;
   height: 100%;
+  border-right: 2px solid transparent;
+  box-sizing: border-box;
 
   .editor-box {
     width: 100%;
     height: 100%;
-    overflow: hidden;
   }
 }
 </style>

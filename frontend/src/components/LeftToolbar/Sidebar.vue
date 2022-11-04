@@ -15,7 +15,7 @@ const handleSplitChange = (offset: number) => {
   <DanContextmenu class="sidebar" :menus="[]">
     <div class="sidebar" :style="{ width: barWidth + 'px' }">
       <DanSplitLine
-        :default-vector="{ x: 300, y: 0 }"
+        :default-vector="{ x: defaultWidth - 4, y: 0 }"
         @change="handleSplitChange"
         @reset-click="barWidth = defaultWidth"
       />
