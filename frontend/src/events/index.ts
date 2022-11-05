@@ -1,4 +1,3 @@
-import { isDev } from '@/utils/env-tools'
 import { logger } from '@/utils/logger'
 
 export type EventTypes = {}
@@ -28,7 +27,7 @@ class EventService {
     const fns = this.eventList.get(event)
     if (fns?.length) {
       fns.forEach(fn => fn(...args))
-    } else if (isDev) {
+    } else {
       logger.warn(`warning: event "${String(event)}" is unregistered.`)
     }
   }

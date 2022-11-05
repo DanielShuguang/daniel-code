@@ -10,6 +10,10 @@ export function OpenFileByDialog() {
   return window['go']['core']['App']['OpenFileByDialog']();
 }
 
+export function OpenFolderByDialog() {
+  return window['go']['core']['App']['OpenFolderByDialog']();
+}
+
 export function ReadDirTree(arg1) {
   return window['go']['core']['App']['ReadDirTree'](arg1);
 }

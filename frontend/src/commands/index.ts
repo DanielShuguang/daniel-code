@@ -1,4 +1,3 @@
-import { isDev } from '@/utils/env-tools'
 import { logger } from '@/utils/logger'
 import { MessageCommands } from './message'
 import { TopMenuCommands } from './top-menu'
@@ -39,7 +38,7 @@ export class CommandSerivce {
     const fn = this.commands.get(cmd)
     if (fn) {
       return fn(...args)
-    } else if (isDev) {
+    } else {
       logger.warn(`warning: command "${String(cmd)}" is unregistered.`)
     }
   }

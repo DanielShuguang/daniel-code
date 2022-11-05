@@ -51,14 +51,14 @@ const handleChangeTab = async (key: KeyTypes) => {
       if (!editor.content.length) {
         // 当前页是文件编辑页且没有数据则进行本地文件读取
         const result = await ReadFileContent(editor.path)
-        if (!result.errorMessage) {
+        if (!result.message) {
           editor.isBinary = result.isBinary ?? false
           if (!result.isBinary) {
             editor.content = [result.content ?? '']
             renderEditor(editor)
           }
         } else {
-          messageSerivce({ type: 'error', message: result.errorMessage })
+          messageSerivce({ type: 'error', message: result.message })
           return
         }
       } else {

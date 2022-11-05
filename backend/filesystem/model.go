@@ -1,24 +1,50 @@
 package filesystem
 
+import "strings"
+
 type DirTree struct {
-	Name     string     `json:"name"`
-	Path     string     `json:"path"`
-	IsDir    bool       `json:"isDir"`
-	Type     string     `json:"type"`
-	Children []*DirTree `json:"children,omitempty"`
+	Name        string    `json:"name"`
+	Path        string    `json:"path"`
+	IsDir       bool      `json:"isDir"`
+	Type        string    `json:"type"`
+	HasChildren bool      `json:"hasChildren"`
+	Children    []DirTree `json:"children,omitempty"`
 }
 
 type FileContentResult struct {
-	Content      string `json:"content,omitempty"`
-	ErrorMessage string `json:"errorMessage,omitempty"`
-	IsBinary     bool   `json:"isBinary"`
+	Content  string `json:"content,omitempty"`
+	Message  string `json:"message,omitempty"`
+	IsBinary bool   `json:"isBinary"`
 }
 
 type FileDetails struct {
 	Name     string `json:"name"`
 	Path     string `json:"path"`
 	Content  string `json:"content"`
-	Err      string `json:"err,omitempty"`
+	Message  string `json:"message,omitempty"`
 	IsBinary bool   `json:"isBinary"`
 	Type     string `json:"type,omitempty"`
+}
+
+type FileTreeResult struct {
+	Message string  `json:"message,omitempty"`
+	Data    DirTree `json:"data,omitempty"`
+}
+
+type SortByDirTree []DirTree
+
+func (a SortByDirTree) Len() int {
+	return len(a)
+}
+func (a SortByDirTree) Swap(i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+func (a SortByDirTree) Less(i, j int) bool {
+	if a[i].IsDir && !a[j].IsDir {
+		return true
+	} else if !a[i].IsDir && a[j].IsDir {
+		return false
+	}
+	aName, bName := strings.ToLower(a[i].Name), strings.ToLower(a[j].Name)
+	return strings.Compare(aName, bName) <= 0
 }

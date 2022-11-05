@@ -80,6 +80,7 @@ export const useInitEditorTheme = () => {
 
 export const useUpdateEditorsStorage = () => {
   const fileStore = useFileSystemStore()
+  const projectStore = useProjectSystemStore()
 
   watch(
     () => fileStore.openEditors,
@@ -88,6 +89,16 @@ export const useUpdateEditorsStorage = () => {
         'opened-editors',
         fileStore.openEditors.map(e => (isFileInfo(e) ? { ...e, content: [] } : e))
       )
+    },
+    { deep: true }
+  )
+
+  watch(
+    () => projectStore.currentProject,
+    () => {
+      if (projectStore.currentProject) {
+        codeLocalStorage.set('active-project', projectStore.currentProject)
+      }
     },
     { deep: true }
   )

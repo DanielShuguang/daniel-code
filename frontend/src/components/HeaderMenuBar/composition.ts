@@ -69,17 +69,17 @@ export const useWindowControllers = () => {
 export const useMenusCommandsShortcuts = () => {
   const keys = useMagicKeys()
 
-  const menus = [...fileMenus, ...editMenus]
-  menus
-    .flatMap(el => [...(el.children || [])])
-    .forEach(el => {
-      el.shortcut &&
-        whenever(keys[el.shortcut!], v => {
-          if (v) {
-            keyDownHandler(el.command as any)
-          }
-        })
-    })
+  const menus = [...fileMenus, ...editMenus].flatMap(el =>
+    el.children ? [el, ...el.children] : [el]
+  )
+  menus.forEach(el => {
+    el.shortcut &&
+      whenever(keys[el.shortcut!], v => {
+        if (v) {
+          keyDownHandler(el.command as any)
+        }
+      })
+  })
 
   const keyDownHandler = debounce((command?: keyof CommandTypes) => {
     command && commandSerivce.execCommand(command)

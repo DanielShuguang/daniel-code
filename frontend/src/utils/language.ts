@@ -5,5 +5,6 @@ export const langsMap: Dict<string, string> = {
   js: 'javascript',
   jsx: 'javascript',
   ts: 'typescript',
-  rs: 'rust'
+  rs: 'rust',
+  md: 'markdown'
 }

@@ -1,20 +1,37 @@
+import { commandSerivce } from '@/commands'
 import { isString } from 'lodash-es'
 import { LogError, LogInfo, LogWarning } from 'runtime'
 
 /**
  * 日志输出
+ * @param notify 是否需要弹窗提示，默认为 true
  */
 export const logger = {
-  warn(message: string | Error) {
+  warn(message: string | Error, notify = true) {
     console.warn(message)
+    notify &&
+      commandSerivce.execCommand('dan-code-message', {
+        type: 'warn',
+        message: getErrorMsg(message)
+      })
     LogWarning(getErrorMsg(message))
   },
-  error(message: string | Error) {
+  error(message: string | Error, notify = true) {
     console.error(message)
+    notify &&
+      commandSerivce.execCommand('dan-code-message', {
+        type: 'error',
+        message: getErrorMsg(message)
+      })
     LogError(getErrorMsg(message))
   },
-  info(message: string | Error) {
+  info(message: string | Error, notify = true) {
     console.log(message)
+    notify &&
+      commandSerivce.execCommand('dan-code-message', {
+        type: 'info',
+        message: getErrorMsg(message)
+      })
     LogInfo(getErrorMsg(message))
   }
 }

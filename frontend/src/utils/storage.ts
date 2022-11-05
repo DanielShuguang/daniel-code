@@ -2,7 +2,6 @@ import { Plugin } from '@/components/LeftToolbar/types'
 import { Nullable } from '@/types/common'
 import { FileInfo, GenericContainer } from '@/types/file-system'
 import { ProjectInfo } from '@/types/project-system'
-import { isDev } from './env-tools'
 import { logger } from './logger'
 
 export interface SessionStorageKeys {}
@@ -24,9 +23,7 @@ export const codeSessionStorage = {
       sessionStorage.setItem(key, JSON.stringify(value))
       return true
     } catch (err) {
-      if (isDev) {
-        logger.warn(err as Error)
-      }
+      logger.warn(err as Error, false)
       return false
     }
   },
@@ -39,9 +36,7 @@ export const codeSessionStorage = {
       const result = JSON.parse(str)
       return result
     } catch (err) {
-      if (isDev) {
-        logger.warn(err as Error)
-      }
+      logger.warn(err as Error, false)
       return null
     }
   }
@@ -56,9 +51,7 @@ export const codeLocalStorage = {
       localStorage.setItem(key, JSON.stringify(value))
       return true
     } catch (err) {
-      if (isDev) {
-        logger.warn(err as Error)
-      }
+      logger.warn(err as Error, false)
       return false
     }
   },
@@ -71,9 +64,7 @@ export const codeLocalStorage = {
       const result = JSON.parse(str)
       return result
     } catch (err) {
-      if (isDev) {
-        logger.warn(err as Error)
-      }
+      logger.warn(err as Error, false)
       return null
     }
   }
