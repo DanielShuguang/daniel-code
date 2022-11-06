@@ -18,8 +18,9 @@ const props = withDefaults(
 )
 const emit = defineEmits<{
   (event: 'update:modelValue', val: KeyTypes): void
-  (event: 'close-tab', val: KeyTypes): void
+  (event: 'closeTab', val: KeyTypes): void
   (event: 'change', val: KeyTypes): void
+  (event: 'doubleClickTab', val: KeyTypes): void
 }>()
 const { modelValue, destroyInactiveTabPane } = toRefs(props)
 
@@ -65,15 +66,18 @@ watchEffect(() => {
         :key="tab.tabKey"
         :class="['tab-item', { 'card-tab': type }, { 'is-active': modelValue === tab.tabKey }]"
         @click.left="handleChangeActiveTab(tab.tabKey)"
+        @dblclick.left="$emit('doubleClickTab', tab.tabKey)"
       >
         <slot name="tab-render" :="tab">
           <span class="tab-title">{{ tab.label }}</span>
         </slot>
-        <a
-          v-if="closable"
-          :class="['tab-close', codicon('close'), { 'show-icon': modelValue === tab.tabKey }]"
-          @click.left.stop="$emit('close-tab', tab.tabKey)"
-        ></a>
+        <slot name="close-btn" :activeTab="modelValue" :="tab">
+          <a
+            v-if="closable"
+            :class="['tab-close', codicon('close'), { 'show-icon': modelValue === tab.tabKey }]"
+            @click.left.stop="$emit('closeTab', tab.tabKey)"
+          ></a>
+        </slot>
       </div>
     </div>
     <div class="tab-content-holder">
@@ -82,7 +86,7 @@ watchEffect(() => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .dan-tabs {
   width: 100%;
 }

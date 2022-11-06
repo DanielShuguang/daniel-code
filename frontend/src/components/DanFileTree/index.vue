@@ -10,10 +10,10 @@ defineProps<{
 }>()
 const emit = defineEmits<{
   (event: 'update:rootFolder', data: FileTreeNode): void
-  (event: 'click-node', node: FileTreeNode): void
-  (event: 'click-file', node: FileTreeNode): void
-  (event: 'click-folder', node: FileTreeNode): void
-  (event: 'double-click-file', node: FileTreeNode): void
+  (event: 'clickNode', node: FileTreeNode): void
+  (event: 'clickFile', node: FileTreeNode): void
+  (event: 'clickFolder', node: FileTreeNode): void
+  (event: 'doubleClickFile', node: FileTreeNode): void
 }>()
 
 let flag = false
@@ -28,17 +28,17 @@ const singleClick = (fn: () => void) => {
 }
 
 provide(clickNodeFnKey, node => {
-  emit('click-node', node)
+  emit('clickNode', node)
   if (node.isDir) {
-    emit('click-folder', node)
+    emit('clickFolder', node)
   } else {
-    emit('click-file', node)
+    emit('clickFile', node)
     singleClick(() => handleOpenFile(node, true))
   }
 })
 provide(doubleClickFileFnKey, node => {
   flag = true
-  emit('double-click-file', node)
+  emit('doubleClickFile', node)
   handleOpenFile(node, false)
 })
 </script>

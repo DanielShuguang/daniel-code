@@ -8,6 +8,7 @@ specifiers:
   '@vscode/codicons': ^0.0.32
   '@vue/test-utils': ^2.2.1
   '@vueuse/core': ^9.4.0
+  classnames: ^2.3.2
   jsdom: ^20.0.1
   keymaster: ^1.6.2
   lodash: npm:lodash-es@^4.17.21
@@ -26,6 +27,7 @@ specifiers:
 dependencies:
   '@vscode/codicons': 0.0.32
   '@vueuse/core': 9.4.0_vue@3.2.41
+  classnames: 2.3.2
   keymaster: 1.6.2
   lodash: /lodash-es/4.17.21
   lodash-es: 4.17.21
@@ -393,6 +395,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /classnames/2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+    dev: false
 
   /combined-stream/1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}

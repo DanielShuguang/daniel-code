@@ -13,12 +13,15 @@ import { FileInfo } from '@/types/file-system'
 import { useResizeEditorContainer } from './composition'
 import { langsMap } from '@/utils/language'
 import { useEventListener } from '@vueuse/core'
+import { FileEditorOptions } from './types'
+import { codicon } from '@/utils/codicon'
+import classNames from 'classnames'
 
 const fileStore = useFileSystemStore()
 
 const editorRefs = ref<Nullable<HTMLDivElement>[]>([])
 const activeTab = computed(() => fileStore.currentEditor?.key || '')
-const editorContainers = shallowRef(new Map<string, monaco.editor.IStandaloneCodeEditor>())
+const editorContainers = shallowRef(new Map<string, FileEditorOptions>())
 
 const { containerRect } = useResizeEditorContainer()
 useEventListener('keydown', ev => {
@@ -32,7 +35,7 @@ const handleCloseTab = (key: KeyTypes) => {
   if (index !== -1) {
     const { openEditors } = fileStore
     const key = openEditors[index].key
-    editorContainers.value.get(key)?.dispose()
+    editorContainers.value.get(key)?.instance?.dispose()
     editorContainers.value.delete(key)
     if (key === fileStore.currentEditor?.key) {
       if (openEditors.length === 1) {
@@ -72,6 +75,7 @@ const handleChangeTab = async (key: KeyTypes) => {
   }
 }
 
+/** 将文件内容渲染到 monaco-editor 中 */
 const renderEditor = (editor: FileInfo) => {
   const targetDom = editorRefs.value.find(ed => ed?.dataset.editorKey === editor.path)
   if (!targetDom || editorContainers.value.has(editor.path)) return
@@ -82,11 +86,27 @@ const renderEditor = (editor: FileInfo) => {
     automaticLayout: true,
     theme: 'vs-dark'
   })
-  editorContainers.value.set(editor.path, monacoInstance)
+  monacoInstance.getModel()?.onDidChangeContent(() => {
+    const key = editor.path
+    const target = editorContainers.value.get(key)
+    if (target) {
+      target.modified.value = true
+    }
+  })
+  editorContainers.value.set(editor.path, { instance: monacoInstance, modified: ref(false) })
 }
 
+/** 确认 tab 是否为预览状态 */
 const getCurrentTabDetails = (key: KeyTypes) => {
   return fileStore.openEditors.find(el => isFileInfo(el.file) && el.key === key)?.viewMode
+}
+
+/** 根据编辑器状态显示不同的关闭键 */
+const getTabClassname = (key: KeyTypes) => {
+  const target = editorContainers.value.get(key.toString())
+  return classNames('tab-close', codicon(target?.modified.value ? 'circle-filled' : 'close'), {
+    'show-icon': target?.modified || activeTab.value === key
+  })
 }
 
 watch(
@@ -110,6 +130,9 @@ watch(
         <span :class="['label-name', { 'is-view-mode': getCurrentTabDetails(tabInfo.tabKey) }]">
           {{ tabInfo.label }}
         </span>
+      </template>
+      <template #close-btn="tab">
+        <a :class="getTabClassname(tab.tabKey)" @click.left.stop="handleCloseTab(tab.tabKey)"></a>
       </template>
       <DanTabPane
         v-for="item in fileStore.openEditors"
