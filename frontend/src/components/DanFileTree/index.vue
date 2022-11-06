@@ -1,43 +1,59 @@
 <script lang="ts" setup>
-import { codicon } from '@/utils/codicon'
+import { provide } from 'vue'
+import { handleOpenFile } from './composition'
+import DanFileTreeNode from './DanFileTreeNode.vue'
+import { clickNodeFnKey, doubleClickFileFnKey } from './data'
 import { FileTreeNode } from './types'
 
 defineProps<{
-  fileTree: FileTreeNode[]
+  rootFolder: FileTreeNode
 }>()
-defineEmits<{
+const emit = defineEmits<{
+  (event: 'update:rootFolder', data: FileTreeNode): void
   (event: 'click-node', node: FileTreeNode): void
+  (event: 'click-file', node: FileTreeNode): void
+  (event: 'click-folder', node: FileTreeNode): void
+  (event: 'double-click-file', node: FileTreeNode): void
 }>()
+
+let flag = false
+const singleClick = (fn: () => void) => {
+  flag = false
+  setTimeout(() => {
+    if (flag) {
+      return
+    }
+    fn()
+  }, 300)
+}
+
+provide(clickNodeFnKey, node => {
+  emit('click-node', node)
+  if (node.isDir) {
+    emit('click-folder', node)
+  } else {
+    emit('click-file', node)
+    singleClick(() => handleOpenFile(node, true))
+  }
+})
+provide(doubleClickFileFnKey, node => {
+  flag = true
+  emit('double-click-file', node)
+  handleOpenFile(node, false)
+})
 </script>
 
 <script lang="ts">
+export const componentName = 'dan-file-tree'
 export default {
-  name: 'dan-file-tree'
+  name: componentName,
+  components: { DanFileTreeNode }
 }
 </script>
 
 <template>
   <div class="dan-file-tree">
-    <div
-      v-for="item in fileTree"
-      class="file-tree-node"
-      :key="item.path"
-      @click.left="item.isDir && $emit('click-node', item)"
-    >
-      <div class="indent">
-        <div
-          v-if="item.isDir"
-          :class="[
-            'expand-icon',
-            codicon('tree-item-expanded'),
-            { 'is-expanded': item.isExpanded }
-          ]"
-        ></div>
-      </div>
-      <div class="file-icon"></div>
-      <div class="file-name">{{ item.name }}</div>
-      <DanFileTree v-if="item.hasChildren && item.children" :file-list="item.children" />
-    </div>
+    <DanFileTreeNode v-for="item in rootFolder.children" :tree-node="item" />
   </div>
 </template>
 

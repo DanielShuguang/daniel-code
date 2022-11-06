@@ -1,7 +1,8 @@
+import { Nullable } from './common'
+
 export interface FileInfo {
   name: string
   path: string
-  key: string
   isProject: boolean
   content: string[]
   type: string
@@ -12,4 +13,13 @@ export interface GenericContainer {
   name: string
   key: string
   component: string
+}
+
+export interface EditorDetails {
+  name: string
+  key: string
+  type: 'widget' | 'file'
+  component: string
+  viewMode: boolean
+  file?: FileInfo
 }

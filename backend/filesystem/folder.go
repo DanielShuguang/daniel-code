@@ -30,6 +30,10 @@ func ReadFolderDetails(dirTree *DirTree) error {
 	}
 	for _, entry := range entries {
 		isDir := entry.IsDir()
+		if isDir && entry.Name() == ".git" {
+			// 忽略 .git 目录
+			continue
+		}
 		entryPath := fmt.Sprintf("%s/%s", dirTree.Path, entry.Name())
 		entryType := "folder"
 		if !isDir {

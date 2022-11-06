@@ -1,22 +1,28 @@
 import { Nullable } from '@/types/common'
-import { FileInfo, GenericContainer } from '@/types/file-system'
+import { EditorDetails } from '@/types/file-system'
 import { codeLocalStorage } from '@/utils/storage'
-import { isFileInfo } from '@/utils/type-check'
 import { cloneDeep, omit } from 'lodash-es'
 import { defineStore } from 'pinia'
 
 export const useFileSystemStore = defineStore('file-system', {
   state: () => ({
-    currentEditor: <Nullable<Omit<FileInfo, 'content'> | GenericContainer>>null,
-    openEditors: <Array<FileInfo | GenericContainer>>[]
+    currentEditor: <Nullable<EditorDetails>>null,
+    openEditors: <EditorDetails[]>[]
   }),
   actions: {
-    changeCurrentEditor(editor: Nullable<Omit<FileInfo, 'content'> | GenericContainer>) {
-      const result = cloneDeep(
-        isFileInfo(editor) && editor.content ? omit(editor, ['content']) : editor
-      )
-      this.currentEditor = result
-      codeLocalStorage.set('active-editor', result)
+    changeCurrentEditor(editor: Nullable<EditorDetails>, viewMode: boolean) {
+      const newEditor = cloneDeep(editor)
+      if (newEditor) {
+        newEditor.viewMode = viewMode
+      }
+      this.currentEditor = newEditor
+      const target = this.openEditors.find(el => el.key === editor?.key)
+      if (target && target.viewMode) {
+        target.viewMode = viewMode
+      } else if (!target && newEditor) {
+        this.openEditors.push(newEditor)
+      }
+      codeLocalStorage.set('active-editor', this.currentEditor)
     }
   }
 })

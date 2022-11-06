@@ -13,6 +13,7 @@
   "dependencies": {
     "@vscode/codicons": "^0.0.32",
     "@vueuse/core": "^9.4.0",
+    "keymaster": "^1.6.2",
     "lodash": "npm:lodash-es@^4.17.21",
     "lodash-es": "^4.17.21",
     "monaco-editor": "^0.34.1",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@babel/types": "^7.18.10",
+    "@types/keymaster": "^1.6.30",
     "@types/lodash-es": "^4.17.6",
     "@vitejs/plugin-vue": "^3.0.3",
     "@vue/test-utils": "^2.2.1",

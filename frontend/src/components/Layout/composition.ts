@@ -1,5 +1,5 @@
 import { useBaseStore, useFileSystemStore, usePluginStore, useProjectSystemStore } from '@/store'
-import { FileInfo, GenericContainer } from '@/types/file-system'
+import { EditorDetails, FileInfo, GenericContainer } from '@/types/file-system'
 import { codeLocalStorage } from '@/utils/storage'
 import { isFileInfo } from '@/utils/type-check'
 import { onBeforeMount, onMounted, watch } from 'vue'
@@ -45,7 +45,7 @@ export const useInitEditorInfo = () => {
   const initFile = (isProject: boolean) => {
     const openedEditors = codeLocalStorage.get('opened-editors')
 
-    const editors: Array<FileInfo | GenericContainer> = []
+    const editors: EditorDetails[] = []
     const shouldOpen = openedEditors?.every(ed => {
       // 如果上次打开时为项目，则检测是否已激活项目
       // 如果上次未打开项目，则打开之前已打开的独立文件
@@ -58,7 +58,8 @@ export const useInitEditorInfo = () => {
     if (shouldOpen) {
       fileStore.$patch(state => (state.openEditors = editors))
       const activeFile = codeLocalStorage.get('active-editor')
-      fileStore.changeCurrentEditor(activeFile ?? editors[0])
+      const obj = activeFile ?? editors[0]
+      fileStore.changeCurrentEditor(obj, obj?.viewMode ?? false)
     }
   }
 
@@ -87,7 +88,13 @@ export const useUpdateEditorsStorage = () => {
     () => {
       codeLocalStorage.set(
         'opened-editors',
-        fileStore.openEditors.map(e => (isFileInfo(e) ? { ...e, content: [] } : e))
+        fileStore.openEditors.map(e => {
+          const obj: EditorDetails = {
+            ...e,
+            file: isFileInfo(e.file) ? { ...e.file, content: [] } : undefined
+          }
+          return obj
+        })
       )
     },
     { deep: true }

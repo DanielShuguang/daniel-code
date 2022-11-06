@@ -36,9 +36,10 @@ const handleCloseTab = (key: KeyTypes) => {
     editorContainers.value.delete(key)
     if (key === fileStore.currentEditor?.key) {
       if (openEditors.length === 1) {
-        fileStore.changeCurrentEditor(null)
+        fileStore.changeCurrentEditor(null, false)
       } else {
-        fileStore.changeCurrentEditor(openEditors[index ? index - 1 : 0])
+        const current = openEditors[index ? index - 1 : 0]
+        fileStore.changeCurrentEditor(current, current.viewMode)
       }
     }
     fileStore.$patch(state => state.openEditors.splice(index, 1))
@@ -47,32 +48,33 @@ const handleCloseTab = (key: KeyTypes) => {
 const handleChangeTab = async (key: KeyTypes) => {
   const editor = cloneDeep(fileStore.openEditors.find(f => f.key === key))
   if (editor) {
-    if (isFileInfo(editor)) {
-      if (!editor.content.length) {
+    const { file } = editor
+    if (isFileInfo(file)) {
+      if (!file.content.length) {
         // 当前页是文件编辑页且没有数据则进行本地文件读取
-        const result = await ReadFileContent(editor.path)
+        const result = await ReadFileContent(file.path)
         if (!result.message) {
-          editor.isBinary = result.isBinary ?? false
+          file.isBinary = result.isBinary ?? false
           if (!result.isBinary) {
-            editor.content = [result.content ?? '']
-            renderEditor(editor)
+            file.content = [result.content ?? '']
+            renderEditor(file)
           }
         } else {
           messageSerivce({ type: 'error', message: result.message })
           return
         }
       } else {
-        renderEditor(editor)
+        file && renderEditor(file)
       }
     } else {
     }
-    fileStore.changeCurrentEditor(editor)
+    fileStore.changeCurrentEditor(editor, editor.viewMode)
   }
 }
 
 const renderEditor = (editor: FileInfo) => {
-  const targetDom = editorRefs.value.find(ed => ed?.dataset.editorKey === editor.key)
-  if (!targetDom || editorContainers.value.has(editor.key)) return
+  const targetDom = editorRefs.value.find(ed => ed?.dataset.editorKey === editor.path)
+  if (!targetDom || editorContainers.value.has(editor.path)) return
 
   const monacoInstance = monaco.editor.create(targetDom, {
     language: langsMap[editor.type] || editor.type,
@@ -80,13 +82,16 @@ const renderEditor = (editor: FileInfo) => {
     automaticLayout: true,
     theme: 'vs-dark'
   })
-  editorContainers.value.set(editor.key, monacoInstance)
+  editorContainers.value.set(editor.path, monacoInstance)
+}
+
+const getCurrentTabDetails = (key: KeyTypes) => {
+  return fileStore.openEditors.find(el => isFileInfo(el.file) && el.key === key)?.viewMode
 }
 
 watch(
   () => fileStore.currentEditor?.key,
-  () => nextTick(() => handleChangeTab(fileStore.currentEditor?.key || '')),
-  { immediate: true }
+  () => nextTick(() => handleChangeTab(fileStore.currentEditor?.key || ''))
 )
 </script>
 
@@ -101,9 +106,19 @@ watch(
       @change="handleChangeTab"
       @close-tab="handleCloseTab"
     >
-      <DanTabPane v-for="item in fileStore.openEditors" :label="item.name" :tab-key="item.key">
+      <template #tab-render="tabInfo">
+        <span :class="['label-name', { 'is-view-mode': getCurrentTabDetails(tabInfo.tabKey) }]">
+          {{ tabInfo.label }}
+        </span>
+      </template>
+      <DanTabPane
+        v-for="item in fileStore.openEditors"
+        :key="item.key"
+        :label="item.name"
+        :tab-key="item.key"
+      >
         <div
-          v-if="isFileInfo(item) && !item.isBinary"
+          v-if="isFileInfo(item.file) && !item.file.isBinary"
           class="editor-box"
           ref="editorRefs"
           :data-editor-key="item.key"
@@ -124,6 +139,9 @@ watch(
   .editor-box {
     width: 100%;
     height: 100%;
+  }
+  .label-name.is-view-mode {
+    font-style: italic;
   }
 }
 </style>

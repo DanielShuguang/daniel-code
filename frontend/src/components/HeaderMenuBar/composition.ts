@@ -1,11 +1,11 @@
 import { commandSerivce, CommandTypes } from '@/commands'
 import { Nullable } from '@/types/common'
 import { codicon } from '@/utils/codicon'
-import { useMagicKeys, whenever } from '@vueuse/core'
-import { debounce, throttle } from 'lodash-es'
+import { debounce } from 'lodash-es'
 import { Quit, WindowIsMaximised, WindowMinimise, WindowToggleMaximise } from 'runtime'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { menuCommands } from './command-handlers'
+import Keymaster from 'keymaster'
 import { editMenus, fileMenus } from './data'
 
 /** 自适应编辑器标题位置 */
@@ -65,20 +65,16 @@ export const useWindowControllers = () => {
   return { controls, isMaximise, correctControls, windowControl }
 }
 
-/** 初始化菜单命令和快捷键 */
+/**
+ * 初始化菜单命令和快捷键
+ * @description 暂未适配 mac os 功能键
+ */
 export const useMenusCommandsShortcuts = () => {
-  const keys = useMagicKeys()
-
   const menus = [...fileMenus, ...editMenus].flatMap(el =>
     el.children ? [el, ...el.children] : [el]
   )
   menus.forEach(el => {
-    el.shortcut &&
-      whenever(keys[el.shortcut!], v => {
-        if (v) {
-          keyDownHandler(el.command as any)
-        }
-      })
+    el.shortcut && Keymaster(el.shortcut.toLowerCase(), () => keyDownHandler(el.command as any))
   })
 
   const keyDownHandler = debounce((command?: keyof CommandTypes) => {
@@ -91,5 +87,8 @@ export const useMenusCommandsShortcuts = () => {
 
   onUnmounted(() => {
     commandSerivce.unregisterAll()
+    menus.forEach(el => {
+      el.shortcut && Keymaster.unbind(el.shortcut.toLowerCase())
+    })
   })
 }

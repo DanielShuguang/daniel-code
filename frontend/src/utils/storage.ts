@@ -1,6 +1,6 @@
 import { Plugin } from '@/components/LeftToolbar/types'
 import { Nullable } from '@/types/common'
-import { FileInfo, GenericContainer } from '@/types/file-system'
+import { EditorDetails } from '@/types/file-system'
 import { ProjectInfo } from '@/types/project-system'
 import { logger } from './logger'
 
@@ -9,8 +9,8 @@ export interface SessionStorageKeys {}
 export interface LocalStorageKeys {
   'active-plugin': Plugin
   'active-project': ProjectInfo
-  'active-editor': Nullable<Omit<FileInfo, 'content'> | GenericContainer>
-  'opened-editors': Array<FileInfo | GenericContainer>
+  'active-editor': Nullable<EditorDetails>
+  'opened-editors': EditorDetails[]
   'editor-theme': string
 }
 
