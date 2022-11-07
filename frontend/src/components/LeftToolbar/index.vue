@@ -28,7 +28,7 @@ const handleClickPlugin = (plugin: Plugin) => {
           v-for="p in plugins"
           :key="p.title"
           :title="getPluginTitle(p)"
-          @click.left="handleClickPlugin(p)"
+          @click="handleClickPlugin(p)"
         >
           <a :class="['icon', p.icon]"></a>
           <div v-if="p.badge" class="badge">

@@ -10,7 +10,7 @@ import { isFileInfo } from '@/utils/type-check'
 import { messageSerivce } from '../DanMessage/composition'
 import { cloneDeep } from 'lodash-es'
 import { FileInfo } from '@/types/file-system'
-import { useResizeEditorContainer } from './composition'
+import { useSaveFileContent, useResizeEditorContainer } from './composition'
 import { langsMap } from '@/utils/language'
 import { useEventListener } from '@vueuse/core'
 import { FileEditorOptions } from './types'
@@ -24,6 +24,7 @@ const activeTab = computed(() => fileStore.currentEditor?.key || '')
 const editorContainers = shallowRef(new Map<string, FileEditorOptions>())
 
 const { containerRect } = useResizeEditorContainer()
+useSaveFileContent(editorContainers, activeTab)
 useEventListener('keydown', ev => {
   if (ev.ctrlKey && ev.key === 'w' && fileStore.currentEditor?.key) {
     handleCloseTab(fileStore.currentEditor.key)
@@ -132,7 +133,7 @@ watch(
         </span>
       </template>
       <template #close-btn="tab">
-        <a :class="getTabClassname(tab.tabKey)" @click.left.stop="handleCloseTab(tab.tabKey)"></a>
+        <a :class="getTabClassname(tab.tabKey)" @click.stop="handleCloseTab(tab.tabKey)"></a>
       </template>
       <DanTabPane
         v-for="item in fileStore.openEditors"

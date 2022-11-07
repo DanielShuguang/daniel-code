@@ -26,7 +26,7 @@ export default {
 <template>
   <div
     class="dan-file-tree-node"
-    @click.left="handleClickNode(treeNode)"
+    @click="handleClickNode(treeNode)"
     @dblclick="!treeNode.isDir && handleDoubleClickNode(treeNode)"
   >
     <div class="file-node-content">

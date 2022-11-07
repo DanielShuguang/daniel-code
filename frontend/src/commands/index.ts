@@ -1,8 +1,9 @@
 import { logger } from '@/utils/logger'
+import { FileCommands } from './file'
 import { MessageCommands } from './message'
 import { TopMenuCommands } from './top-menu'
 
-export type CommandTypes = TopMenuCommands & MessageCommands
+export type CommandTypes = TopMenuCommands & MessageCommands & FileCommands
 
 export class CommandSerivce {
   private static instance: CommandSerivce

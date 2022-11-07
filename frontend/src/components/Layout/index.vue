@@ -4,6 +4,7 @@ import BottomStatusBar from '../BottomStatusBar.vue'
 import EditorContainer from '../EditorContainer/index.vue'
 import HeaderMenuBar from '../HeaderMenuBar/index.vue'
 import LeftToolBar from '../LeftToolbar/index.vue'
+import DanMessage from '../DanMessage/index.vue'
 import {
   useInitEditorInfo,
   useInitEditorTheme,
@@ -27,6 +28,8 @@ useUpdateEditorsStorage()
       </div>
     </main>
     <BottomStatusBar class="bottom-operation" />
+
+    <DanMessage />
   </div>
 </template>
 

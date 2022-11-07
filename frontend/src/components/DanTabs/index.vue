@@ -65,8 +65,8 @@ watchEffect(() => {
         v-for="tab in tabList"
         :key="tab.tabKey"
         :class="['tab-item', { 'card-tab': type }, { 'is-active': modelValue === tab.tabKey }]"
-        @click.left="handleChangeActiveTab(tab.tabKey)"
-        @dblclick.left="$emit('doubleClickTab', tab.tabKey)"
+        @click="handleChangeActiveTab(tab.tabKey)"
+        @dblclick="$emit('doubleClickTab', tab.tabKey)"
       >
         <slot name="tab-render" :="tab">
           <span class="tab-title">{{ tab.label }}</span>
@@ -75,7 +75,7 @@ watchEffect(() => {
           <a
             v-if="closable"
             :class="['tab-close', codicon('close'), { 'show-icon': modelValue === tab.tabKey }]"
-            @click.left.stop="$emit('closeTab', tab.tabKey)"
+            @click.stop="$emit('closeTab', tab.tabKey)"
           ></a>
         </slot>
       </div>

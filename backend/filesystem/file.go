@@ -88,6 +88,9 @@ func OpenFileByDialog(ctx context.Context) FileDetails {
 	if err != nil {
 		result.Message = fmt.Sprintf("打开资源管理器失败: %s", err.Error())
 		return result
+	} else if path == "" {
+		result.Message = "cancel"
+		return result
 	}
 	file := ReadFileContent(path)
 	result.IsBinary = file.IsBinary

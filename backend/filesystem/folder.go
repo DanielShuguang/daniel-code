@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	osRuntime "runtime"
 	"sort"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -34,7 +35,12 @@ func ReadFolderDetails(dirTree *DirTree) error {
 			// 忽略 .git 目录
 			continue
 		}
-		entryPath := fmt.Sprintf("%s/%s", dirTree.Path, entry.Name())
+
+		splitLine := "/"
+		if osRuntime.GOOS == "windows" {
+			splitLine = "\\"
+		}
+		entryPath := fmt.Sprintf("%s%s%s", dirTree.Path, splitLine, entry.Name())
 		entryType := "folder"
 		if !isDir {
 			entryType = GetFileTypeByName(entry.Name())
@@ -62,6 +68,9 @@ func OpenFolderByDialog(ctx context.Context) FileTreeResult {
 	}
 	if err != nil {
 		result.Message = fmt.Sprintf("读取目录失败: %s", err.Error())
+		return result
+	} else if path == "" {
+		result.Message = "cancel"
 		return result
 	}
 	result.Data = DirTree{

@@ -99,7 +99,7 @@ onMounted(() => {
     @mouseenter="handleEnter"
     @mouseleave="handleLeave"
     @mousedown.left="isDragging = true"
-    @dblclick.left="handleReset"
+    @dblclick="handleReset"
   ></div>
 </template>
 

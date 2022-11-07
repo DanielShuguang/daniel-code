@@ -31,7 +31,7 @@ onMounted(() => {
           v-for="rea in messageOpt.reasons"
           :key="rea"
           class="operation-btn"
-          @click.left="messageOpt.callback?.(rea)"
+          @click="messageOpt.callback?.(rea)"
         >
           {{ rea }}
         </button>

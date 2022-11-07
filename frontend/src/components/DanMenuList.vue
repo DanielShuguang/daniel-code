@@ -89,14 +89,14 @@ export default {
 <template>
   <div
     class="menu-list"
-    :style="{ left: position.x + 'px', top: position.y + 'px' }"
+    :style="{ left: position.x + 'px', top: position.y + 'px', zIndex }"
     role="menu"
     @mouseleave="closeNextMenu"
   >
     <template v-for="(menu, i) in list" :key="menu.title">
       <div
         :class="['menu-list-item', { active: hoverItem === menu.title }]"
-        @click.left="handleClickMenu(menu)"
+        @click="handleClickMenu(menu)"
         @mouseenter="handleHover(menu, $event)"
       >
         <span class="title">{{ menu.title }}</span>
@@ -126,7 +126,6 @@ export default {
   position: fixed;
   width: 315px;
   padding: 9px 0;
-  z-index: v-bind(zIndex);
   background: var(--default-menu-background);
   border-radius: 5px;
   box-shadow: 0 2px 10px 0 #000;
