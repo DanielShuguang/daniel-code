@@ -1,8 +1,13 @@
 <script lang="ts" setup>
 import { usePluginStore } from '@/store'
 import { plugins } from './data'
-import Sidebar from './Sidebar.vue'
 import { Plugin } from './types'
+import DanContextmenu from '../DanContextmenu.vue'
+import DanSplitLine from '../DanSplitLine.vue'
+import { ref } from 'vue'
+
+const defaultWidth = 300
+const barWidth = ref(defaultWidth)
 
 const pluginStore = usePluginStore()
 
@@ -12,6 +17,10 @@ const getPluginTitle = (plugin: Plugin) => {
     list.push(`(${plugin.shortcut})`)
   }
   return list.join('')
+}
+
+const handleSplitChange = (offset: number) => {
+  barWidth.value += offset
 }
 
 const handleClickPlugin = (plugin: Plugin) => {
@@ -38,7 +47,17 @@ const handleClickPlugin = (plugin: Plugin) => {
       </ul>
       <div class="editor-action-bar"></div>
     </div>
-    <Sidebar />
+
+    <DanContextmenu class="sidebar" :menus="[]">
+      <div class="sidebar" :style="{ width: barWidth + 'px' }">
+        <component class="plugin-content" :is="pluginStore.activePlugin?.component" />
+        <DanSplitLine
+          :default-vector="{ x: defaultWidth - 4, y: 0 }"
+          @change="handleSplitChange"
+          @reset-click="barWidth = defaultWidth"
+        />
+      </div>
+    </DanContextmenu>
   </div>
 </template>
 
@@ -58,6 +77,11 @@ const handleClickPlugin = (plugin: Plugin) => {
 .actions-container {
   width: 100%;
   overflow: hidden;
+}
+.sidebar {
+  position: relative;
+  height: 100%;
+  background: var(--left-tool-background);
 }
 .action-item {
   position: relative;

@@ -4,4 +4,5 @@ export interface Plugin {
   icon: string
   pluginKey: string
   badge?: string | number
+  component: string
 }
