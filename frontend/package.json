@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@babel/types": "^7.18.10",
+    "@testing-library/vue": "^6.6.1",
     "@types/keymaster": "^1.6.30",
     "@types/lodash-es": "^4.17.6",
     "@vitejs/plugin-vue": "^3.0.3",
