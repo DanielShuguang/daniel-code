@@ -44,10 +44,8 @@ provide(doubleClickFileFnKey, node => {
 </script>
 
 <script lang="ts">
-export const componentName = 'dan-file-tree'
 export default {
-  name: componentName,
-  components: { DanFileTreeNode }
+  name: 'dan-file-tree'
 }
 </script>
 

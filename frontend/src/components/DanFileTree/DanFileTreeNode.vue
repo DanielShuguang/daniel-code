@@ -17,9 +17,8 @@ const handleDoubleClickNode = inject(doubleClickFileFnKey)!
 </script>
 
 <script lang="ts">
-export const componentName = 'dan-file-tree-node'
 export default {
-  name: componentName
+  name: 'dan-file-tree-node'
 }
 </script>
 

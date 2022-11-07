@@ -3,7 +3,7 @@ import { Dict, KeyTypes } from '@/types/common'
 import { codicon } from '@/utils/codicon'
 import { isObject } from 'lodash-es'
 import { provide, readonly, ref, toRefs, useSlots, VNode, watchEffect } from 'vue'
-import { componentName } from './DanTabPane.vue'
+import DanTabPane from './DanTabPane.vue'
 import { ActiveTabKey, DestroyTabKey } from './data'
 import { TabItem } from './types'
 
@@ -43,7 +43,7 @@ watchEffect(() => {
     const list: TabItem[] = []
     children.forEach(child => {
       const { type } = child
-      if (isObject(type) && 'name' in type && type.name === componentName) {
+      if (isObject(type) && 'name' in type && type.name === DanTabPane.name) {
         const props = child.props as Dict<string, string>
         const tabKey = props['tab-key'] || props.tabKey
         tabKey &&

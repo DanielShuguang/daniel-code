@@ -13,9 +13,8 @@ const destroyInactiveTabPane = inject(DestroyTabKey)
 </script>
 
 <script lang="ts">
-export const componentName = 'dan-tab-pane'
 export default {
-  name: componentName
+  name: 'dan-tab-pane'
 }
 </script>
 
