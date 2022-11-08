@@ -11,6 +11,24 @@ type DirTree struct {
 	Children    []DirTree `json:"children,omitempty"`
 }
 
+type SortByDirTree []DirTree
+
+func (a SortByDirTree) Len() int {
+	return len(a)
+}
+func (a SortByDirTree) Swap(i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+func (a SortByDirTree) Less(i, j int) bool {
+	if a[i].IsDir && !a[j].IsDir {
+		return true
+	} else if !a[i].IsDir && a[j].IsDir {
+		return false
+	}
+	aName, bName := strings.ToLower(a[i].Name), strings.ToLower(a[j].Name)
+	return strings.Compare(aName, bName) <= 0
+}
+
 type FileContentResult struct {
 	Content  string `json:"content,omitempty"`
 	Message  string `json:"message,omitempty"`
@@ -31,20 +49,7 @@ type FileTreeResult struct {
 	Data    DirTree `json:"data,omitempty"`
 }
 
-type SortByDirTree []DirTree
-
-func (a SortByDirTree) Len() int {
-	return len(a)
-}
-func (a SortByDirTree) Swap(i, j int) {
-	a[i], a[j] = a[j], a[i]
-}
-func (a SortByDirTree) Less(i, j int) bool {
-	if a[i].IsDir && !a[j].IsDir {
-		return true
-	} else if !a[i].IsDir && a[j].IsDir {
-		return false
-	}
-	aName, bName := strings.ToLower(a[i].Name), strings.ToLower(a[j].Name)
-	return strings.Compare(aName, bName) <= 0
+type ModifyFileContentResult struct {
+	Success bool   `json:"success"`
+	Message string `json:"message,omitempty"`
 }

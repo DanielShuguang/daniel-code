@@ -2,6 +2,7 @@ package filesystem
 
 import (
 	"bufio"
+	"changeme/backend/utils"
 	"context"
 	"fmt"
 	"io"
@@ -77,7 +78,7 @@ func ReadFileContent(filePath string) FileContentResult {
 		result.Message = fmt.Sprintf("文件内容读取错误: %s", err.Error())
 		return result
 	}
-	result.Content = string(content)
+	result.Content = utils.Bytes2String(content)
 	return result
 }
 
@@ -101,6 +102,20 @@ func OpenFileByDialog(ctx context.Context) FileDetails {
 
 	if strings.Contains(result.Name, ".") {
 		result.Type = GetFileTypeByName(result.Name)
+	}
+	return result
+}
+
+// 修改文件内容
+func ModifyFileContent(path, content string) ModifyFileContentResult {
+	result := ModifyFileContentResult{
+		Success: false,
+	}
+	err := os.WriteFile(path, utils.String2Bytes(content), 0)
+	if err != nil {
+		result.Message = fmt.Sprintf("保存失败: %s", err.Error())
+	} else {
+		result.Success = true
 	}
 	return result
 }
