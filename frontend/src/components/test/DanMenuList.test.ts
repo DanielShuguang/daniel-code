@@ -19,12 +19,12 @@ test('DanMenuList render with list', async () => {
     props
   })
 
-  expect(wrapper.exists()).toBeTruthy()
+  expect(wrapper.exists()).toBe(true)
 
   props.list.forEach(item => {
     const html = wrapper.html()
-    expect(html.includes(item.title)).toBeTruthy()
-    expect(html.includes(`${item.shortcut}`)).toBeTruthy()
+    expect(html.includes(item.title)).toBe(true)
+    expect(html.includes(`${item.shortcut}`)).toBe(true)
   })
 
   const childrenElement = wrapper.findAll('.menu-list-item')

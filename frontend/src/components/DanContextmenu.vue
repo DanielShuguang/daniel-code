@@ -39,16 +39,14 @@ const handleClose = () => {
   <div class="contextmenu-root" @contextmenu.prevent="handleContextmenu">
     <slot></slot>
     <teleport to="body">
-      <div class="menu-portal">
-        <DanMenuList
-          v-if="showMenu"
-          ref="menuDom"
-          class="contextmenu-menu-list"
-          :list="menus"
-          :position="position"
-          @close="handleClose"
-        />
-      </div>
+      <DanMenuList
+        v-if="showMenu"
+        ref="menuDom"
+        class="contextmenu-menu-list"
+        :list="menus"
+        :position="position"
+        @close="handleClose"
+      />
     </teleport>
   </div>
 </template>
