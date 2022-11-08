@@ -28,7 +28,7 @@ class EventService {
     if (fns?.length) {
       fns.forEach(fn => fn(...args))
     } else {
-      logger.warn(`warning: event "${String(event)}" is unregistered.`)
+      logger.warn(`warning: event "${String(event)}" is unregistered.`, false)
     }
   }
 

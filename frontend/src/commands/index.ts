@@ -24,7 +24,8 @@ export class CommandSerivce {
   registerCommand = <E extends keyof CommandTypes>(cmd: E, fn: CommandTypes[E]) => {
     if (this.commands.has(cmd)) {
       logger.warn(
-        `warning: command ${cmd} has been registered, this operation will not take effect.`
+        `warning: command ${cmd} has been registered, this operation will not take effect.`,
+        false
       )
       return false
     }
@@ -40,7 +41,7 @@ export class CommandSerivce {
     if (fn) {
       return fn(...args)
     } else {
-      logger.warn(`warning: command "${String(cmd)}" is unregistered.`)
+      logger.warn(`warning: command "${String(cmd)}" is unregistered.`, false)
     }
   }
 

@@ -1,6 +1,5 @@
 import { commandSerivce } from '@/commands'
 import { isString } from 'lodash-es'
-import { LogError, LogInfo, LogWarning } from 'runtime'
 
 /**
  * 日志输出
@@ -14,7 +13,6 @@ export const logger = {
         type: 'warn',
         message: getErrorMsg(message)
       })
-    LogWarning(getErrorMsg(message))
   },
   error(message: string | Error, notify = true) {
     console.error(message)
@@ -23,7 +21,6 @@ export const logger = {
         type: 'error',
         message: getErrorMsg(message)
       })
-    LogError(getErrorMsg(message))
   },
   info(message: string | Error, notify = true) {
     console.log(message)
@@ -32,7 +29,6 @@ export const logger = {
         type: 'info',
         message: getErrorMsg(message)
       })
-    LogInfo(getErrorMsg(message))
   }
 }
 
