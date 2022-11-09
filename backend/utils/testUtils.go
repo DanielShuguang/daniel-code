@@ -20,6 +20,8 @@ func GetCorrectPath(path string) string {
 	correctPath := path
 	if runtime.GOOS == "windows" {
 		correctPath = strings.ReplaceAll(correctPath, "/", "\\")
+	} else {
+		correctPath = strings.ReplaceAll(correctPath, "\\", "/")
 	}
 	return correctPath
 }
