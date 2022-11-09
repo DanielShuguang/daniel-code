@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import DanFileTree from '@/components/DanFileTree/index.vue'
+import DanFileTree from '@/ui-components/DanFileTree/index.vue'
 import { useProjectSystemStore } from '@/store'
 
 const projectStore = useProjectSystemStore()

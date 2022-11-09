@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
-import DanSplitLine from '../DanSplitLine.vue'
+import DanSplitLine from '../ui-components/DanSplitLine.vue'
 
 type DanSplitLineProps = InstanceType<typeof DanSplitLine>['$props']
 

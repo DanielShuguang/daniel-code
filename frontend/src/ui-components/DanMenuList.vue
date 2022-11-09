@@ -5,7 +5,7 @@ import { codicon } from '@/utils/codicon'
 import { useEventListener } from '@vueuse/core'
 import { cloneDeep, debounce } from 'lodash-es'
 import { ref } from 'vue'
-import { MenuListItem } from './HeaderMenuBar/types'
+import { MenuListItem } from '../components/HeaderMenuBar/types'
 
 export interface DanMenuListProps {
   list: MenuListItem[]

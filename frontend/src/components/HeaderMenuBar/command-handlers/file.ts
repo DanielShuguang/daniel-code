@@ -1,5 +1,5 @@
 import { commandSerivce } from '@/commands'
-import { activeOpenedFile } from '@/components/DanFileTree/composition'
+import { activeOpenedFile } from '@/ui-components/DanFileTree/composition'
 import { useProjectSystemStore } from '@/store'
 import { logger } from '@/utils/logger'
 import { OpenFileByDialog, OpenFolderByDialog } from 'backend/core/App'

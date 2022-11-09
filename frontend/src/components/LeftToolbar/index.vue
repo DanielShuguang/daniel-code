@@ -2,8 +2,8 @@
 import { usePluginStore } from '@/store'
 import { plugins } from './data'
 import { Plugin } from './types'
-import DanContextmenu from '../DanContextmenu.vue'
-import DanSplitLine from '../DanSplitLine.vue'
+import DanContextmenu from '../../ui-components/DanContextmenu.vue'
+import DanSplitLine from '@/ui-components/DanSplitLine.vue'
 import { ref } from 'vue'
 
 const defaultWidth = 300

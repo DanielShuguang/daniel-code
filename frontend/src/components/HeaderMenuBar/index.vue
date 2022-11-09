@@ -4,7 +4,7 @@ import { Nullable } from '@/types/common'
 import { onClickOutside } from '@vueuse/core'
 import { cloneDeep } from 'lodash-es'
 import { computed, ref, watchEffect } from 'vue'
-import DanMenuList, { DanMenuListProps } from '../DanMenuList.vue'
+import DanMenuList, { DanMenuListProps } from '../../ui-components/DanMenuList.vue'
 import {
   useMenusCommandsShortcuts,
   useMovingWindowTitle,

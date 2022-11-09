@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { provide } from 'vue'
-import { handleOpenFile } from './composition'
+import { handleOpenFile } from '../../ui-components/DanFileTree/composition'
 import DanFileTreeNode from './DanFileTreeNode.vue'
-import { clickNodeFnKey, doubleClickFileFnKey } from './data'
-import { FileTreeNode } from './types'
+import { clickNodeFnKey, doubleClickFileFnKey } from '../../ui-components/DanFileTree/data'
+import { FileTreeNode } from '../../ui-components/DanFileTree/types'
 
 defineProps<{
   rootFolder: FileTreeNode

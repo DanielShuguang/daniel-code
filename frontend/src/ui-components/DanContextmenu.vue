@@ -3,7 +3,7 @@ import { Nullable } from '@/types/common'
 import { onClickOutside } from '@vueuse/core'
 import { ref } from 'vue'
 import DanMenuList from './DanMenuList.vue'
-import { MenuListItem } from './HeaderMenuBar/types'
+import { MenuListItem } from '../components/HeaderMenuBar/types'
 
 defineProps<{
   menus: MenuListItem[]

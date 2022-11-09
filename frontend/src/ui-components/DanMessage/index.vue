@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { useMessageEvents } from './composition'
+import { useMessageEvents } from '../../ui-components/DanMessage/composition'
 import DanMessageItem from './DanMessageItem.vue'
 
 const visible = ref(false)
