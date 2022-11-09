@@ -1,19 +1,21 @@
 # README
 
-## About
+## 为什么要做这个
 
-This is the official Wails Vue-TS template.
+这是一个仿照 vs code 开发的编辑器，只是仿界面，架构方面并没有参照原版，也没有用 theia 那种架构，不会支持插件系统但会尽可能提升拓展性。后续在我学完编译器相关的东西之后，会考虑加入语法检测和格式化等功能。本项目是一个小前端一时兴起的娱乐项目，不会做商用，欢迎感兴趣的人贡献自己的一份代码。
 
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+## 项目简介
 
-## Live Development
+本项目是一个 CS 项目，前端用 vue3.x + typescript + vite 开发，后端使用基于 go 实现的 [wailsjs](https://wails.io/zh-Hans/) 框架。因为没有用 electron 开发，不需要塞一个 chrome 内核，所以在打包大小来说，会更接近 C#、C++ 开发的那种传统桌面应用。性能方面，后端使用 go 相比于 node.js 会有部分提升。
 
-To run in live development mode, run `wails dev` in the project directory. This will run a Vite development
-server that will provide very fast hot reload of your frontend changes. If you want to develop in a browser
-and have access to your Go methods, there is also a dev server that runs on http://localhost:34115. Connect
-to this in your browser, and you can call your Go code from devtools.
+## 为什么后端要用 go？
 
-## Building
+首先排除 electron，一直以来我都觉得靠 electron 来实现用 js 写客户端是很扯淡的事情，本来 js 的性能就一般般的（并不是所有人都能做到让 js 达到其他后端高级语言的执行效率的），在处理系统事件的时候靠异步 io 还能应付，一旦遇到需要大量计算的情况，就会非常麻烦。在做 BS 项目时还能把麻烦的计算全部扔给后端的多线程语言，但是 electron 这种前后全是用 js 的项目就会避无可避，虽然 nodejs 现在已经支持多线程了，但是相较来说，他的多线程并不怎么好用，实际使用起来基本 go、rust 这类新兴语言没有可比性。不过对我来说，最重要的还是 nodejs 特别是 electron 开发时的环境问题，极其复杂的依赖关系，还有 C++、python 等东西需要安装，即便是老司机也很难绕过一堆坑，放弃 electron 可以让我尽量少地把时间浪费在前期环境准备上。
 
-To build a redistributable, production mode package, use `wails build`.
+当然 electron 火爆的原因更多是多平台的兼容一致性，内置一个固定版本的 chrome 让前端开发不需要考虑不同浏览器之间的 es 支持度，不过该项目作为一个个人娱乐项目，我并不打算支持过低版本的浏览器，再加上现在 webview2 等高级特性在各 os 上都有了相当程度的支持，electron 并不适合此项目。
+
+一开始我是考虑过用基于 rust 的 [tauri](https://tauri.app/) 框架的，但是在权衡了开发效率和性能之后，还是选择了 go 语言，rust 虽然进一步提升了安全性和性能，但是其编译速度和开发效率相比于 go 我还是更偏向后者。
+
+## 前端选择
+
+react 是我首先放弃的选择，react 的响应式系统相比于现在流行的其他框架，性能方面是偏劣势的。hooks 带来的心智负担倒是其次，主要是其反直觉的用法让我并不太喜欢使用。比较下来，vue 的性能、写法和较为完善的社区、工具链让其成为我首要的选择。
