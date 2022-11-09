@@ -25,24 +25,24 @@ export default {
 <template>
   <div
     class="dan-file-tree-node"
-    @click="handleClickNode(treeNode)"
+    @click.stop="handleClickNode(treeNode)"
     @dblclick="!treeNode.isDir && handleDoubleClickNode(treeNode)"
   >
     <div class="file-node-content">
       <div class="indent" :style="{ paddingLeft: 8 * treeDeep + 'px' }">
         <div
           v-if="treeNode.isDir"
-          :class="[
-            'expand-icon',
-            codicon('tree-item-expanded'),
-            { 'is-expanded': treeNode.isExpanded }
-          ]"
+          :class="['expand-icon', codicon('chevron-down'), { 'is-expanded': treeNode.isExpanded }]"
         ></div>
       </div>
       <div :class="['file-icon', codicon(treeNode.isDir ? 'folder' : 'file')]"></div>
       <div class="file-name">{{ treeNode.name }}</div>
     </div>
-    <div class="file-tree-children" v-if="treeNode.hasChildren && treeNode.children?.length">
+    <div
+      class="file-tree-children"
+      v-show="treeNode.isExpanded"
+      v-if="treeNode.hasChildren && treeNode.children?.length"
+    >
       <DanFileTreeNode
         v-for="item in treeNode.children"
         :tree-node="item"
@@ -52,7 +52,7 @@ export default {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .dan-file-tree-node {
   width: 100%;
   .file-node-content {
@@ -74,6 +74,9 @@ export default {
     padding-right: 6px;
   }
   .expand-icon {
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
     transform: rotate(-90deg);
 
     &.is-expanded {

@@ -4,7 +4,7 @@ import BottomStatusBar from '../BottomStatusBar.vue'
 import EditorContainer from '../EditorContainer/index.vue'
 import HeaderMenuBar from '../HeaderMenuBar/index.vue'
 import LeftToolBar from '../LeftToolbar/index.vue'
-import DanMessage from '../DanMessage/index.vue'
+import DanMessage from '@/ui-components/DanMessage/index.vue'
 import {
   useInitEditorInfo,
   useInitEditorTheme,

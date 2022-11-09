@@ -6,6 +6,10 @@ export function GitLookup() {
   return window['go']['core']['App']['GitLookup']();
 }
 
+export function ModifyFileContent(arg1, arg2) {
+  return window['go']['core']['App']['ModifyFileContent'](arg1, arg2);
+}
+
 export function OpenFileByDialog() {
   return window['go']['core']['App']['OpenFileByDialog']();
 }

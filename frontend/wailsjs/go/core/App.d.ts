@@ -4,6 +4,8 @@ import {filesystem} from '../models';
 
 export function GitLookup():Promise<boolean>;
 
+export function ModifyFileContent(arg1:string,arg2:string):Promise<filesystem.ModifyFileContentResult>;
+
 export function OpenFileByDialog():Promise<filesystem.FileDetails>;
 
 export function OpenFolderByDialog():Promise<filesystem.FileTreeResult>;

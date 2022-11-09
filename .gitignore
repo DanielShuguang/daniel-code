@@ -4,3 +4,4 @@ frontend/dist
 frontend/coverage
 frontend/package.json.md5
 *.cov
+*.code-workspace

@@ -36,6 +36,7 @@ func (a *App) OpenFolderByDialog() filesystem.FileTreeResult {
 	return filesystem.OpenFolderByDialog(a.ctx)
 }
 
+// 写入新的文件内容
 func (a *App) ModifyFileContent(path, content string) filesystem.ModifyFileContentResult {
 	return filesystem.ModifyFileContent(path, content)
 }

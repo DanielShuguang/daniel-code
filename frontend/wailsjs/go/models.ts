@@ -110,6 +110,20 @@ export namespace filesystem {
 		    return a;
 		}
 	}
+	export class ModifyFileContentResult {
+	    success: boolean;
+	    message?: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ModifyFileContentResult(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.success = source["success"];
+	        this.message = source["message"];
+	    }
+	}
 
 }
 
