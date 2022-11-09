@@ -7,10 +7,10 @@ import DanMenuList, { DanMenuListProps } from '../DanMenuList.vue'
 test('DanMenuList render with list', async () => {
   const props: DanMenuListProps = {
     list: [
-      { title: 'name1', shortcut: 'A' },
-      { title: 'name2', shortcut: 'B' },
-      { title: 'name3', shortcut: 'C' },
-      { title: 'name4', shortcut: 'D' }
+      { title: 'name1', shortcut: 'A', type: 1 },
+      { title: 'name2', shortcut: 'B', type: 1, command: 'test' },
+      { title: 'name3', shortcut: 'C', type: 2 },
+      { title: 'name4', shortcut: 'D', type: 3 }
     ],
     position: { x: 0, y: 0 }
   }
@@ -27,8 +27,10 @@ test('DanMenuList render with list', async () => {
     expect(html.includes(`${item.shortcut}`)).toBe(true)
   })
 
-  const childrenElement = wrapper.findAll('.menu-list-item')
-  expect(childrenElement.length).toBe(props.list.length)
+  const menuItems = wrapper.findAll('.menu-list-item')
+  expect(menuItems.length).toBe(props.list.length)
+  const splitLines = wrapper.findAll('.split-line')
+  expect(splitLines.length).toBe(2)
 })
 
 test("DanMenuList's position", async () => {
@@ -69,4 +71,27 @@ test('DanMenuList close by esc', async () => {
   await fireEvent(window, new KeyboardEvent('keydown', { key: 'Escape' }))
   const emitted = wrapper.emitted()
   expect(emitted).toHaveProperty('close')
+})
+
+test('DanMenuList hover & click item', async () => {
+  const props: DanMenuListProps = {
+    list: [
+      { title: 'name1', shortcut: 'A', type: 1 },
+      { title: 'name2', shortcut: 'B', type: 1, command: 'test' },
+      { title: 'name3', shortcut: 'C', type: 2 },
+      { title: 'name4', shortcut: 'D', type: 3 }
+    ],
+    position: { x: 50, y: 50 }
+  }
+  const wrapper = mount(DanMenuList, { props })
+
+  const menuItems = wrapper.findAll('.menu-list-item')
+  await menuItems[0].trigger('mouseenter')
+  expect(menuItems[0].element.classList.contains('active')).toBeTruthy()
+
+  await menuItems[0].trigger('click')
+  expect(wrapper.emitted()).not.toHaveProperty('close')
+
+  await menuItems[1].trigger('click')
+  expect(wrapper.emitted()).toHaveProperty('close')
 })

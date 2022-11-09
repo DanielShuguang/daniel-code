@@ -1,7 +1,10 @@
 package core
 
-import "changeme/backend/git"
+import (
+	"changeme/backend/gitService"
+)
 
 func (a *App) GitLookup() bool {
-	return git.GitAvailable()
+	gitService := gitService.New()
+	return gitService.IsAvailable
 }

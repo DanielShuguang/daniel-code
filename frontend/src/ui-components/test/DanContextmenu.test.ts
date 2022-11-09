@@ -1,4 +1,4 @@
-import { findByText, fireEvent } from '@testing-library/vue'
+import { findByText } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import DanContextmenu from '../DanContextmenu.vue'
@@ -36,7 +36,7 @@ test('DanContextmenu event trigger', async () => {
     props
   })
 
-  await fireEvent(wrapper.element, new MouseEvent('contextmenu', { clientX: 100, clientY: 100 }))
+  await wrapper.trigger('contextmenu', { clientX: 100, clientY: 100 })
   const menuListComp = wrapper.getComponent(DanMenuList)
 
   for (const item of props.menus) {
@@ -45,7 +45,7 @@ test('DanContextmenu event trigger', async () => {
   }
 
   const el = menuListComp.get('.menu-list-item')
-  await fireEvent(el.element, new MouseEvent('click'))
+  await el.trigger('click')
   await nextTick()
   const findResult = wrapper.findAllComponents(DanMenuList)
   expect(findResult.length).toBe(0)
