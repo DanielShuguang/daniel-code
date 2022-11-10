@@ -2,6 +2,7 @@
 
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import { defineConfig } from 'vite'
 import monaco from 'vite-plugin-monaco-editor'
 
@@ -10,7 +11,7 @@ const monacoEditorPlugin: typeof monaco = (monaco as any).default
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), monacoEditorPlugin({})],
+  plugins: [vue(), vueJsx(), monacoEditorPlugin({})],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

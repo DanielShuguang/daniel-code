@@ -4,8 +4,6 @@ import { useProjectSystemStore } from '@/store'
 import { FileTreeNode } from '@/ui-components/DanFileTree/types'
 import { breadthFirstSearch } from '@/utils/tree-search'
 import { ReadDirTree } from 'backend/core/App'
-import { commandSerivce } from '@/commands'
-import { watch, watchEffect } from 'vue'
 import { messageSerivce } from '@/ui-components/DanMessage/composition'
 
 const projectStore = useProjectSystemStore()

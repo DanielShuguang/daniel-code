@@ -1,65 +1,81 @@
-<script lang="ts" setup>
+<script lang="tsx">
 import { usePluginStore } from '@/store'
 import { plugins } from './data'
 import { Plugin } from './types'
-import DanContextmenu from '../../ui-components/DanContextmenu.vue'
+import DanContextmenu from '@/ui-components/DanContextmenu.vue'
 import DanSplitLine from '@/ui-components/DanSplitLine.vue'
-import { ref } from 'vue'
+import { defineComponent, ref } from 'vue'
+import classNames from 'classnames'
+import { isString } from 'lodash-es'
+import DynamicComponent from '../DynamicComponent.vue'
 
-const defaultWidth = 300
-const barWidth = ref(defaultWidth)
+export default defineComponent({
+  setup() {
+    const defaultWidth = 300
+    const barWidth = ref(defaultWidth)
 
-const pluginStore = usePluginStore()
+    const pluginStore = usePluginStore()
 
-const getPluginTitle = (plugin: Plugin) => {
-  const list = [plugin.title]
-  if (plugin.shortcut) {
-    list.push(`(${plugin.shortcut})`)
-  }
-  return list.join('')
-}
+    const getPluginTitle = (plugin: Plugin) => {
+      const list = [plugin.title]
+      if (plugin.shortcut) {
+        list.push(`(${plugin.shortcut})`)
+      }
+      return list.join('')
+    }
 
-const handleSplitChange = (offset: number) => {
-  barWidth.value += offset
-}
+    const handleSplitChange = (offset: number) => {
+      barWidth.value += offset
+    }
 
-const handleClickPlugin = (plugin: Plugin) => {
-  pluginStore.changeActivePlugin(plugin)
-}
-</script>
+    const handleClickPlugin = (plugin: Plugin) => {
+      pluginStore.changeActivePlugin(plugin)
+    }
 
-<template>
-  <div class="plugin-toolbar" data-code-plugin>
-    <div class="content">
-      <ul class="actions-container">
-        <li
-          :class="['action-item', { active: pluginStore.activePlugin?.pluginKey === p.pluginKey }]"
-          v-for="p in plugins"
-          :key="p.title"
-          :title="getPluginTitle(p)"
-          @click="handleClickPlugin(p)"
-        >
-          <a :class="['icon', p.icon]"></a>
-          <div v-if="p.badge" class="badge">
-            <div class="badge-content"></div>
+    return () => (
+      <div class="plugin-toolbar" data-code-plugin>
+        <div class="content">
+          <ul class="actions-container">
+            {plugins.map(p => (
+              <li
+                class={classNames('action-item', {
+                  active: pluginStore.activePlugin?.pluginKey === p.pluginKey
+                })}
+                key={p.title}
+                title={getPluginTitle(p)}
+                onClick={_ => handleClickPlugin(p)}
+              >
+                <a class={classNames('icon', p.icon)}></a>
+                {p.badge ? (
+                  <div class="badge">
+                    <div class="badge-content"></div>
+                  </div>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+          <div class="editor-action-bar"></div>
+        </div>
+
+        <DanContextmenu class="sidebar" menus={[]}>
+          <div class="sidebar" style={{ width: barWidth.value + 'px' }}>
+            {isString(pluginStore.activePlugin?.component) ? (
+              <DynamicComponent name={pluginStore.activePlugin?.component} />
+            ) : (
+              pluginStore.activePlugin?.component
+            )}
+            <DanSplitLine
+              defaultVector={{ x: defaultWidth - 4, y: 0 }}
+              onChange={handleSplitChange}
+              onResetClick={() => (barWidth.value = defaultWidth)}
+            />
           </div>
-        </li>
-      </ul>
-      <div class="editor-action-bar"></div>
-    </div>
-
-    <DanContextmenu class="sidebar" :menus="[]">
-      <div class="sidebar" :style="{ width: barWidth + 'px' }">
-        <component class="plugin-content" :is="pluginStore.activePlugin?.component" />
-        <DanSplitLine
-          :default-vector="{ x: defaultWidth - 4, y: 0 }"
-          @change="handleSplitChange"
-          @reset-click="barWidth = defaultWidth"
-        />
+        </DanContextmenu>
       </div>
-    </DanContextmenu>
-  </div>
-</template>
+    )
+  }
+})
+</script>
 
 <style scoped lang="scss">
 .plugin-toolbar {

@@ -8,7 +8,7 @@ export const plugins: Plugin[] = [
     pluginKey: 'explorer',
     icon: codicon('files'),
     shortcut: 'Ctrl+Shift+E',
-    component: FileExplorer.name
+    component: FileExplorer
   },
   {
     title: '搜索',

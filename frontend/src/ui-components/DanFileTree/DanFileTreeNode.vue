@@ -35,8 +35,11 @@ export default {
           :class="['expand-icon', codicon('chevron-down'), { 'is-expanded': treeNode.isExpanded }]"
         ></div>
       </div>
-      <div :class="['file-icon', codicon(treeNode.isDir ? 'folder' : 'file')]"></div>
-      <div class="file-name">{{ treeNode.name }}</div>
+      <div
+        :class="['file-icon', codicon(treeNode.isDir ? 'folder' : 'file')]"
+        :title="treeNode.path"
+      ></div>
+      <div class="file-name" :title="treeNode.path">{{ treeNode.name }}</div>
     </div>
     <div
       class="file-tree-children"
@@ -72,6 +75,14 @@ export default {
     width: 16px;
     height: 16px;
     padding-right: 6px;
+  }
+  .file-name {
+    flex: 1;
+    margin-right: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
   }
   .expand-icon {
     width: 16px;

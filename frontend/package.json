@@ -28,6 +28,7 @@
     "@types/keymaster": "^1.6.30",
     "@types/lodash-es": "^4.17.6",
     "@vitejs/plugin-vue": "^3.0.3",
+    "@vitejs/plugin-vue-jsx": "^2.1.1",
     "@vitest/coverage-c8": "^0.25.1",
     "@vue/test-utils": "^2.2.1",
     "jsdom": "^20.0.1",
