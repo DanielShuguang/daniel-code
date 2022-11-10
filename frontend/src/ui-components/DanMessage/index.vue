@@ -1,33 +1,40 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useMessageEvents } from '../../ui-components/DanMessage/composition'
 import DanMessageItem from './DanMessageItem.vue'
 
-const visible = ref(false)
-const showNewMessage = ref(false)
+const showMsgBox = ref(false)
 
-const { messageList } = useMessageEvents()
+const { messageList, showMessageList } = useMessageEvents()
+
+const showNewMessage = computed(() => !!showMessageList.value.length)
 </script>
 
 <template>
   <teleport to="body">
-    <div v-show="visible" class="notifications-center">
+    <div v-if="showMsgBox" v-show="showMsgBox" class="notifications-center">
       <div class="notifications-center-header">
         <div class="header-title">通知</div>
       </div>
-      <div class="notifications-list-container"></div>
-    </div>
-    <template v-show="showNewMessage">
-      <div class="new-notifications-list">
+      <div class="notifications-list-container">
         <DanMessageItem
-          v-for="[key, opt] in messageList"
-          :key="key"
+          v-for="(opt, i) in messageList"
+          :key="opt.key"
           class="notifications-list-row"
           :message-opt="opt"
-          @close="messageList.delete(key)"
+          @close="messageList.splice(i, 1)"
         />
       </div>
-    </template>
+    </div>
+    <div v-else-if="showNewMessage" class="new-notifications-list">
+      <DanMessageItem
+        v-for="(opt, i) in showMessageList.slice(showMessageList.length - 3)"
+        :key="opt.key"
+        class="notifications-list-row"
+        :message-opt="opt"
+        @close="messageList.splice(i, 1)"
+      />
+    </div>
   </teleport>
 </template>
 
@@ -35,17 +42,28 @@ const { messageList } = useMessageEvents()
 .notifications-center,
 .new-notifications-list {
   position: fixed;
-  right: 8px;
+  right: 16px;
   bottom: 31px;
+  width: 500px;
+  font-size: 13px;
+  z-index: 1111;
+}
+.notifications-center {
+  .notifications-list-container {
+    max-height: 300px;
+    overflow-y: auto;
+  }
 }
 .new-notifications-list {
-  .notifications {
-    &-list-row {
-      margin-bottom: 5px;
+  max-height: calc(100vh - 60px);
+  overflow: hidden;
+}
+:deep() .notifications {
+  &-list-row {
+    margin-bottom: 5px;
 
-      &:last-of-type {
-        margin-bottom: 0;
-      }
+    &:last-of-type {
+      margin-bottom: 0;
     }
   }
 }

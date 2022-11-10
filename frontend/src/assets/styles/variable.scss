@@ -14,6 +14,7 @@ html.default-dark {
   --bottom-toolbar-background: rgb(0, 122, 204);
   --active-window-control-color: rgb(79, 79, 79);
   --close-window-control-color: rgb(214, 20, 36);
+  --warn-background: rgb(245, 189, 0);
 
   --default-plugin-color: rgba(255, 255, 255, 0.4);
   --active-plugin-color: rgb(255, 255, 255);
@@ -21,4 +22,6 @@ html.default-dark {
   --focus-border-color: rgb(0, 127, 212);
   --default-tab-color: #ffffff80;
   --hover-file-node-background: rgb(42, 45, 46);
+
+  --message-container-background: rgb(42, 45, 46);
 }

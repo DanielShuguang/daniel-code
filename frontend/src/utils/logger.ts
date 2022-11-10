@@ -1,4 +1,4 @@
-import { commandSerivce } from '@/commands'
+import { messageSerivce } from '@/ui-components/DanMessage/composition'
 import { isString } from 'lodash-es'
 
 /**
@@ -9,7 +9,7 @@ export const logger = {
   warn(message: string | Error, notify = true) {
     console.warn(message)
     notify &&
-      commandSerivce.execCommand('dan-code-message', {
+      messageSerivce({
         type: 'warn',
         message: getErrorMsg(message)
       })
@@ -17,7 +17,7 @@ export const logger = {
   error(message: string | Error, notify = true) {
     console.error(message)
     notify &&
-      commandSerivce.execCommand('dan-code-message', {
+      messageSerivce({
         type: 'error',
         message: getErrorMsg(message)
       })
@@ -25,7 +25,7 @@ export const logger = {
   info(message: string | Error, notify = true) {
     console.log(message)
     notify &&
-      commandSerivce.execCommand('dan-code-message', {
+      messageSerivce({
         type: 'info',
         message: getErrorMsg(message)
       })

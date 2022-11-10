@@ -6,6 +6,7 @@ import { breadthFirstSearch } from '@/utils/tree-search'
 import { ReadDirTree } from 'backend/core/App'
 import { commandSerivce } from '@/commands'
 import { watch, watchEffect } from 'vue'
+import { messageSerivce } from '@/ui-components/DanMessage/composition'
 
 const projectStore = useProjectSystemStore()
 
@@ -37,7 +38,7 @@ const loadFolderDetails = async (folder: FileTreeNode) => {
   if (!result.message && result.data) {
     return result.data.children
   } else {
-    commandSerivce.execCommand('dan-code-message', {
+    messageSerivce({
       type: 'error',
       message: result.message || '读取文件夹错误'
     })

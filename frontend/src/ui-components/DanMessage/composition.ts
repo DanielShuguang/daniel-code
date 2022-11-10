@@ -1,8 +1,13 @@
 import { commandSerivce } from '@/commands'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { MessageOption } from './types'
 import { nanoid } from 'nanoid'
 import { TimeUtils } from '@/utils/time-utils'
+
+interface Config extends MessageOption {
+  key: string
+  show: boolean
+}
 
 /**
  * 推送右下角弹出消息
@@ -13,22 +18,50 @@ export const messageSerivce = (opt: MessageOption) => {
 }
 
 export const useMessageEvents = () => {
-  const messageList = ref(new Map<string, MessageOption>())
+  const messageList = ref<Config[]>([])
+  const showMessageList = computed(() => {
+    const showList: Config[] = []
+    messageList.value.forEach(val => {
+      if (val.show) {
+        showList.push(val)
+      }
+    })
+    return showList
+  })
 
   onMounted(() => {
     commandSerivce.registerCommand('dan-code-message', opt => {
       const key = nanoid()
-      messageList.value.set(key, {
+      const cfg: Config = {
         ...opt,
+        key,
         closable: opt.closable ?? true,
-        timeout: opt.timeout ?? 3 * TimeUtils.SECOND
-      })
+        timeout: opt.timeout ?? 3 * TimeUtils.SECOND,
+        show: true
+      }
+      messageList.value.push(cfg)
+      if (cfg.timeout) {
+        setTimeout(() => {
+          const target = messageList.value.find(el => el.key === key)
+          if (target) {
+            target.show = false
+          }
+        }, cfg.timeout)
+      }
     })
+
+    for (let j = 0; j < 5; j++) {
+      let str = ''
+      for (let i = 0; i < 50; i++) {
+        str += `message-test${j} `
+      }
+      messageSerivce({ type: 'info', message: str, timeout: 0 })
+    }
   })
 
   onUnmounted(() => {
     commandSerivce.unregisterCommand('dan-code-message')
   })
 
-  return { messageList }
+  return { messageList, showMessageList }
 }
