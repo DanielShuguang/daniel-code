@@ -1,7 +1,9 @@
 import { useBaseStore, useFileSystemStore, usePluginStore, useProjectSystemStore } from '@/store'
 import { EditorDetails, FileInfo, GenericContainer } from '@/types/file-system'
 import { codeLocalStorage } from '@/utils/storage'
+import { TimeUtils } from '@/utils/time-utils'
 import { isFileInfo } from '@/utils/type-check'
+import { debounce } from 'lodash-es'
 import { onBeforeMount, onMounted, watch } from 'vue'
 import { plugins } from '../LeftToolbar/data'
 
@@ -34,7 +36,7 @@ export const useInitEditorInfo = () => {
   const initProject = () => {
     const activeProject = codeLocalStorage.get('active-project')
     if (activeProject) {
-      projectStore.changeCurrentProject(activeProject)
+      projectStore.$patch({ currentProject: activeProject })
     }
     initFile(!!activeProject)
   }
@@ -83,6 +85,10 @@ export const useUpdateEditorsStorage = () => {
   const fileStore = useFileSystemStore()
   const projectStore = useProjectSystemStore()
 
+  const cacheProject = debounce(() => {
+    codeLocalStorage.set('active-project', projectStore.currentProject)
+  }, TimeUtils.SECOND * 5)
+
   watch(
     () => fileStore.openEditors,
     () => {
@@ -100,13 +106,5 @@ export const useUpdateEditorsStorage = () => {
     { deep: true }
   )
 
-  watch(
-    () => projectStore.currentProject,
-    () => {
-      if (projectStore.currentProject) {
-        codeLocalStorage.set('active-project', projectStore.currentProject)
-      }
-    },
-    { deep: true }
-  )
+  watch(() => projectStore.currentProject, cacheProject, { deep: true })
 }

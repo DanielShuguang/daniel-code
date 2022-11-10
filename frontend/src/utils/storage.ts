@@ -9,7 +9,7 @@ export interface SessionStorageKeys {}
 export interface LocalStorageKeys {
   'active-plugin': Plugin
   'active-project': ProjectInfo
-  'active-editor': Nullable<EditorDetails>
+  'active-editor': EditorDetails
   'opened-editors': EditorDetails[]
   'editor-theme': string
 }
@@ -18,9 +18,9 @@ export interface LocalStorageKeys {
  * 操作 sessionStorage
  */
 export const codeSessionStorage = {
-  set<K extends keyof SessionStorageKeys>(key: K, value: SessionStorageKeys[K]) {
+  set<K extends keyof SessionStorageKeys>(key: K, value: Nullable<SessionStorageKeys[K]>) {
     try {
-      sessionStorage.setItem(key, JSON.stringify(value))
+      sessionStorage.setItem(key, JSON.stringify(value ?? null))
       return true
     } catch (err) {
       logger.warn(err as Error, false)
@@ -46,9 +46,9 @@ export const codeSessionStorage = {
  * 操作 localStorage
  */
 export const codeLocalStorage = {
-  set<K extends keyof LocalStorageKeys>(key: K, value: LocalStorageKeys[K]) {
+  set<K extends keyof LocalStorageKeys>(key: K, value: Nullable<LocalStorageKeys[K]>) {
     try {
-      localStorage.setItem(key, JSON.stringify(value))
+      localStorage.setItem(key, JSON.stringify(value ?? null))
       return true
     } catch (err) {
       logger.warn(err as Error, false)

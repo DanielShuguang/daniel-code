@@ -86,7 +86,7 @@ export default {
   .file-icon {
     width: 22px;
     height: 22px;
-    line-height: 22px;
+    line-height: 22px !important;
     padding-right: 6px;
   }
 }

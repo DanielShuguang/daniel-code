@@ -83,6 +83,10 @@ const handleClickPlugin = (plugin: Plugin) => {
   height: 100%;
   background: var(--left-tool-background);
 }
+.plugin-content {
+  height: 100%;
+  width: 100%;
+}
 .action-item {
   position: relative;
   width: 100%;

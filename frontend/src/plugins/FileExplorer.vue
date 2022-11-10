@@ -5,6 +5,7 @@ import { FileTreeNode } from '@/ui-components/DanFileTree/types'
 import { breadthFirstSearch } from '@/utils/tree-search'
 import { ReadDirTree } from 'backend/core/App'
 import { commandSerivce } from '@/commands'
+import { watch, watchEffect } from 'vue'
 
 const projectStore = useProjectSystemStore()
 
@@ -51,9 +52,36 @@ export default {
 </script>
 
 <template>
-  <DanFileTree
-    v-if="projectStore.currentProject"
-    :root-folder="projectStore.currentProject"
-    @click-folder="handleFolderExpand"
-  />
+  <div class="file-explorer">
+    <h3 class="project-name title">{{ projectStore.currentProject?.name }}</h3>
+    <DanFileTree
+      v-if="projectStore.currentProject"
+      class="file-tree"
+      :root-folder="projectStore.currentProject"
+      @click-folder="handleFolderExpand"
+    />
+  </div>
 </template>
+
+<style lang="scss" scoped>
+.file-explorer {
+  position: relative;
+  max-height: calc(100vh - 52px);
+  overflow: hidden auto;
+
+  .project-name {
+    min-width: 3rem;
+    padding-left: 20px;
+    line-height: 22px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .title {
+    text-transform: uppercase;
+  }
+}
+</style>

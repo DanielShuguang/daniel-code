@@ -1,4 +1,6 @@
 import { Nullable } from '@/types/common'
+import { TimeUtils } from '@/utils/time-utils'
+import { isEqual } from 'lodash-es'
 import { onMounted, ref, Ref } from 'vue'
 
 export interface SWRInstance {
@@ -8,9 +10,17 @@ export interface SWRInstance {
   fn: (key: string) => Promise<any>
 }
 
+export interface SWROption {
+  /** 延迟 s */
+  delay?: number
+  /** 是否进行深度对比 */
+  deepEqual?: boolean
+}
+
 const cacheClient = new Map<string, SWRInstance>()
 
-export const useSWR = <R>(key: string, fn: (key: string) => Promise<R>) => {
+export const useSWR = <R>(key: string, fn: (key: string) => Promise<R>, option?: SWROption) => {
+  const opt = ref<SWROption>({})
   const content: SWRInstance = {
     data: ref<Nullable<R>>(null),
     error: ref(''),
@@ -23,16 +33,29 @@ export const useSWR = <R>(key: string, fn: (key: string) => Promise<R>) => {
     content.isValidating.value = true
     try {
       const res: any = await content.fn(key)
-      content.data.value = res
+      const isEq = equalFn(res, content.data.value)
+      if (!isEq) {
+        content.data.value = res
+      }
     } catch (e) {
       const err = e as Error
-      content.error.value = err.stack || err.message
+      content.error.value = err.message
     } finally {
       content.isValidating.value = false
+      const delayTime = opt.value.delay ? opt.value.delay * TimeUtils.SECOND : 5 * TimeUtils.MINUTE
+      setTimeout(run, delayTime)
     }
   }
 
+  const equalFn = (value: any, other: any) => {
+    if (opt.value.deepEqual) {
+      return isEqual(value, other)
+    }
+    return Object.is(value, other)
+  }
+
   onMounted(() => {
+    opt.value = { ...option }
     run()
   })
 
