@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { MessageOption } from './types'
 import { nanoid } from 'nanoid'
 import { TimeUtils } from '@/utils/time-utils'
+import { getIntRandom } from '@/utils/random'
 
 interface Config extends MessageOption {
   key: string
@@ -50,12 +51,13 @@ export const useMessageEvents = () => {
       }
     })
 
+    // HACK
     for (let j = 0; j < 5; j++) {
       let str = ''
       for (let i = 0; i < 50; i++) {
         str += `message-test${j} `
       }
-      messageSerivce({ type: 'info', message: str, timeout: 0 })
+      messageSerivce({ type: 'info', message: str, timeout: getIntRandom(0, 5) * TimeUtils.SECOND })
     }
   })
 

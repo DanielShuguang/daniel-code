@@ -1,13 +1,29 @@
 <script lang="ts" setup>
+import { useEventListener } from '@vueuse/core'
 import { computed, ref } from 'vue'
-import { useMessageEvents } from '../../ui-components/DanMessage/composition'
+import { useMessageEvents } from './composition'
 import DanMessageItem from './DanMessageItem.vue'
 
 const showMsgBox = ref(false)
 
 const { messageList, showMessageList } = useMessageEvents()
+useEventListener('keydown', ev => {
+  if (ev.key === 'Escape') {
+    showMsgBox.value = false
+    messageList.value.forEach(el => {
+      el.show = false
+    })
+  }
+})
 
 const showNewMessage = computed(() => !!showMessageList.value.length)
+
+const deleteMessage = (key: string) => {
+  const index = messageList.value.findIndex(el => el.key === key)
+  if (index > -1) {
+    messageList.value.splice(index, 1)
+  }
+}
 </script>
 
 <template>
@@ -28,11 +44,13 @@ const showNewMessage = computed(() => !!showMessageList.value.length)
     </div>
     <div v-else-if="showNewMessage" class="new-notifications-list">
       <DanMessageItem
-        v-for="(opt, i) in showMessageList.slice(showMessageList.length - 3)"
+        v-for="opt in showMessageList.slice(
+          showMessageList.length > 3 ? showMessageList.length - 3 : 0
+        )"
         :key="opt.key"
         class="notifications-list-row"
         :message-opt="opt"
-        @close="messageList.splice(i, 1)"
+        @close="deleteMessage(opt.key)"
       />
     </div>
   </teleport>

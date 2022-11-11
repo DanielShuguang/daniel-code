@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import DanFileTree from '@/ui-components/DanFileTree/index.vue'
+import DanFileTree from '@/ui-components/DanFileTree/DanFileTree.vue'
 import { useProjectSystemStore } from '@/store'
 import { FileTreeNode } from '@/ui-components/DanFileTree/types'
 import { breadthFirstSearch } from '@/utils/tree-search'

@@ -1,5 +1,5 @@
 import { useBaseStore, useFileSystemStore, usePluginStore, useProjectSystemStore } from '@/store'
-import { EditorDetails, FileInfo, GenericContainer } from '@/types/file-system'
+import { EditorDetails } from '@/types/file-system'
 import { codeLocalStorage } from '@/utils/storage'
 import { TimeUtils } from '@/utils/time-utils'
 import { isFileInfo } from '@/utils/type-check'
