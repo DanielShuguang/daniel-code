@@ -1,5 +1,6 @@
 import FileExplorer from '@/plugins/FileExplorer.vue'
 import { codicon } from '@/utils/codicon'
+import { h } from 'vue'
 import { Plugin } from './types'
 
 export const plugins: Plugin[] = [
@@ -8,7 +9,7 @@ export const plugins: Plugin[] = [
     pluginKey: 'explorer',
     icon: codicon('files'),
     shortcut: 'Ctrl+Shift+E',
-    component: FileExplorer
+    component: h(FileExplorer)
   },
   {
     title: '搜索',

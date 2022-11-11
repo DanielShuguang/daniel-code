@@ -7,7 +7,7 @@ import { logger } from './logger'
 export interface SessionStorageKeys {}
 
 export interface LocalStorageKeys {
-  'active-plugin': Plugin
+  'active-plugin': Omit<Plugin, 'component'>
   'active-project': ProjectInfo
   'active-editor': EditorDetails
   'opened-editors': EditorDetails[]

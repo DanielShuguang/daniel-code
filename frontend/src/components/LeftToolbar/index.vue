@@ -2,9 +2,8 @@
 import { usePluginStore } from '@/store'
 import { plugins } from './data'
 import { Plugin } from './types'
-import DanContextmenu from '@/ui-components/DanContextmenu.vue'
 import DanSplitLine from '@/ui-components/DanSplitLine.vue'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, Fragment, ref, toRaw } from 'vue'
 import classNames from 'classnames'
 import { isString } from 'lodash-es'
 import DynamicComponent from '../DynamicComponent.vue'
@@ -32,6 +31,18 @@ export default defineComponent({
       pluginStore.changeActivePlugin(plugin)
     }
 
+    const render = () => {
+      const target = plugins.find(p => pluginStore.activePlugin?.pluginKey === p.pluginKey)
+      if (target) {
+        return isString(target.component) ? (
+          <DynamicComponent name={target.component} />
+        ) : (
+          target.component
+        )
+      }
+      return null
+    }
+
     return () => (
       <div class="plugin-toolbar" data-code-plugin>
         <div class="content">
@@ -57,20 +68,14 @@ export default defineComponent({
           <div class="editor-action-bar"></div>
         </div>
 
-        <DanContextmenu class="sidebar" menus={[]}>
-          <div class="sidebar" style={{ width: barWidth.value + 'px' }}>
-            {isString(pluginStore.activePlugin?.component) ? (
-              <DynamicComponent name={pluginStore.activePlugin?.component} />
-            ) : (
-              pluginStore.activePlugin?.component
-            )}
-            <DanSplitLine
-              defaultVector={{ x: defaultWidth - 4, y: 0 }}
-              onChange={handleSplitChange}
-              onResetClick={() => (barWidth.value = defaultWidth)}
-            />
-          </div>
-        </DanContextmenu>
+        <div class="sidebar" style={{ width: barWidth.value + 'px' }}>
+          {render()}
+          <DanSplitLine
+            defaultVector={{ x: defaultWidth - 4, y: 0 }}
+            onChange={handleSplitChange}
+            onResetClick={() => (barWidth.value = defaultWidth)}
+          />
+        </div>
       </div>
     )
   }
