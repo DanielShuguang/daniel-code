@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { isDev } from '@/utils/env-tools'
-import BottomStatusBar from '../BottomStatusBar.vue'
-import EditorContainer from '../EditorContainer/EditorContainer.vue'
-import HeaderMenuBar from '../HeaderMenuBar/HeaderMenuBar.vue'
-import LeftToolBar from '../LeftToolbar/LeftToolbar.vue'
-import DanMessage from '@/ui-components/DanMessage/DanMessage.vue'
-import ConfigProvider from '../ConfigProvider/ConfigProvider.vue'
+import BottomStatusBar from './BottomStatusBar.vue'
+import EditorContainer from './EditorContainer/EditorContainer.vue'
+import HeaderMenuBar from './HeaderMenuBar/HeaderMenuBar.vue'
+import LeftToolBar from './LeftToolbar/LeftToolbar.vue'
+import MessageBox from './MessageBox/MessageBox.vue'
+import ConfigProvider from './ConfigProvider/ConfigProvider.vue'
 </script>
 
 <template>
@@ -20,7 +20,7 @@ import ConfigProvider from '../ConfigProvider/ConfigProvider.vue'
       </main>
       <BottomStatusBar class="bottom-operation" />
 
-      <DanMessage />
+      <MessageBox />
     </div>
   </ConfigProvider>
 </template>

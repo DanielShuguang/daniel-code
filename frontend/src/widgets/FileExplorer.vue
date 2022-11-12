@@ -4,7 +4,7 @@ import { useProjectSystemStore } from '@/store'
 import { FileTreeNode } from '@/ui-components/DanFileTree/types'
 import { breadthFirstSearch } from '@/utils/tree-search'
 import { ReadDirTree } from 'backend/core/App'
-import { messageSerivce } from '@/ui-components/DanMessage/composition'
+import { messageSerivce } from '@/components/MessageBox/composition'
 
 const projectStore = useProjectSystemStore()
 

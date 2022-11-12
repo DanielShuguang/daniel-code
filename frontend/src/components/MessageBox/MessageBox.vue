@@ -2,7 +2,7 @@
 import { useEventListener } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useMessageEvents } from './composition'
-import DanMessageItem from './DanMessageItem.vue'
+import MessageItem from './MessageItem.vue'
 
 const showMsgBox = ref(false)
 
@@ -33,7 +33,7 @@ const deleteMessage = (key: string) => {
         <div class="header-title">通知</div>
       </div>
       <div class="notifications-list-container">
-        <DanMessageItem
+        <MessageItem
           v-for="(opt, i) in messageList"
           :key="opt.key"
           class="notifications-list-row"
@@ -43,7 +43,7 @@ const deleteMessage = (key: string) => {
       </div>
     </div>
     <div v-else-if="showNewMessage" class="new-notifications-list">
-      <DanMessageItem
+      <MessageItem
         v-for="opt in showMessageList.slice(
           showMessageList.length > 3 ? showMessageList.length - 3 : 0
         )"

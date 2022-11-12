@@ -1,7 +1,7 @@
-import { commandSerivce } from '@/commands'
+import { commandSerivce, useCommandService } from '@/commands'
 import { Nullable } from '@/types/common'
 import { useResizeObserver, useWindowSize } from '@vueuse/core'
-import { onMounted, onUnmounted, Ref, ref, ShallowRef, watch } from 'vue'
+import { onMounted, Ref, ref, ShallowRef, watch } from 'vue'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { FileEditorOptions } from './types'
 
@@ -45,38 +45,30 @@ export const useSaveFileContent = (
   const isSaving = ref(false)
   const timer = ref<Nullable<NodeJS.Timeout>>(null)
 
-  onMounted(() => {
-    commandSerivce.registerCommand('file-get-opend-files', () => containers.value)
-    commandSerivce.registerCommand('file-read-current-content', () => {
-      const editor = containers.value.get(activeTab.value)
-      if (!editor) return null
-      const result = {
-        content: editor.instance.getValue() || '',
-        hasModified: !!editor.modified.value,
-        filePath: activeTab.value
-      }
-      if (result.hasModified) {
-        timer.value = setTimeout(() => {
-          isSaving.value = true
-          timer.value = null
-        }, 500)
-      }
-      return result
-    })
-    commandSerivce.registerCommand('file-save-complete', key => {
-      timer.value && clearTimeout(timer.value)
-      const editor = containers.value.get(key)
-      if (editor) {
-        editor.modified.value = false
-      }
-      isSaving.value = false
-    })
+  useCommandService('file-get-opend-files', () => containers.value)
+  useCommandService('file-read-current-content', () => {
+    const editor = containers.value.get(activeTab.value)
+    if (!editor) return null
+    const result = {
+      content: editor.instance.getValue() || '',
+      hasModified: !!editor.modified.value,
+      filePath: activeTab.value
+    }
+    if (result.hasModified) {
+      timer.value = setTimeout(() => {
+        isSaving.value = true
+        timer.value = null
+      }, 500)
+    }
+    return result
   })
-
-  onUnmounted(() => {
-    commandSerivce.unregisterCommand('file-read-current-content')
-    commandSerivce.unregisterCommand('file-save-complete')
-    commandSerivce.unregisterCommand('file-get-opend-files')
+  useCommandService('file-save-complete', key => {
+    timer.value && clearTimeout(timer.value)
+    const editor = containers.value.get(key)
+    if (editor) {
+      editor.modified.value = false
+    }
+    isSaving.value = false
   })
 
   return { isSaving }

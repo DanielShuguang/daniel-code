@@ -1,3 +1,4 @@
+import { onMounted, onUnmounted } from 'vue'
 import { logger } from '@/utils/logger'
 import { FileCommands } from './file'
 import { MessageCommands } from './message'
@@ -55,3 +56,13 @@ export class CommandSerivce {
 }
 
 export const commandSerivce = CommandSerivce.getInstance()
+
+export const useCommandService = <E extends keyof CommandTypes>(cmd: E, fn: CommandTypes[E]) => {
+  onMounted(() => {
+    commandSerivce.registerCommand(cmd, fn)
+  })
+
+  onUnmounted(() => {
+    commandSerivce.unregisterCommand(cmd)
+  })
+}

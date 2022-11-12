@@ -7,7 +7,7 @@ import DanTabPane from '../../ui-components/DanTabs/DanTabPane.vue'
 import DanTabs from '../../ui-components/DanTabs/DanTabs.vue'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { isFileInfo } from '@/utils/type-check'
-import { messageSerivce } from '../../ui-components/DanMessage/composition'
+import { messageSerivce } from '../MessageBox/composition'
 import { cloneDeep } from 'lodash-es'
 import { FileInfo } from '@/types/file-system'
 import { useSaveFileContent, useResizeEditorContainer, editorEventHandler } from './composition'
@@ -93,10 +93,25 @@ const renderEditor = (editor: FileInfo) => {
     const target = editorContainers.value.get(key)
     if (target) {
       target.modified.value = true
+      fileStore.$patch(state => {
+        const ed = state.openEditors.find(el => el.key === key)
+        if (ed) {
+          ed.viewMode = false
+        }
+      })
     }
   })
   editorEventHandler(monacoInstance)
   editorContainers.value.set(editor.path, { instance: monacoInstance, modified: ref(false) })
+}
+
+const handleDbClick = (tabKey: KeyTypes) => {
+  fileStore.$patch(state => {
+    const target = state.openEditors.find(el => el.key === tabKey)
+    if (target) {
+      target.viewMode = false
+    }
+  })
 }
 
 /** 确认 tab 是否为预览状态 */
@@ -128,6 +143,7 @@ watch(
       closable
       @change="handleChangeTab"
       @close-tab="handleCloseTab"
+      @double-click-tab="handleDbClick"
     >
       <template #tab-render="tabInfo">
         <span :class="['label-name', { 'is-view-mode': getCurrentTabDetails(tabInfo.tabKey) }]">

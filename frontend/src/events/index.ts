@@ -1,4 +1,5 @@
 import { logger } from '@/utils/logger'
+import { onMounted, onUnmounted } from 'vue'
 
 export type EventTypes = {}
 
@@ -51,3 +52,13 @@ class EventService {
 }
 
 export const eventService = EventService.getInstance()
+
+export const useEventBus = <E extends keyof EventTypes>(event: E, fn: EventTypes[E]) => {
+  onMounted(() => {
+    eventService.on(event, fn)
+  })
+
+  onUnmounted(() => {
+    eventService.off(event, fn)
+  })
+}

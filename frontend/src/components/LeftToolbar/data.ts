@@ -1,4 +1,4 @@
-import FileExplorer from '@/plugins/FileExplorer.vue'
+import FileExplorer from '@/widgets/FileExplorer.vue'
 import { codicon } from '@/utils/codicon'
 import { h } from 'vue'
 import { Plugin } from './types'

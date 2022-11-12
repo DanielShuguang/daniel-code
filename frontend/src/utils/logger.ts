@@ -1,4 +1,4 @@
-import { messageSerivce } from '@/ui-components/DanMessage/composition'
+import { messageSerivce } from '@/components/MessageBox/composition'
 import { isString } from 'lodash-es'
 
 /**

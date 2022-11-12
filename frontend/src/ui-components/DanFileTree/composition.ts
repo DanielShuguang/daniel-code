@@ -28,6 +28,7 @@ export const activeOpenedFile = (fileInfo: FileInfo, viewMode: boolean) => {
   const existFile = fileStore.openEditors.find(
     editor => isFileInfo(editor.file) && editor.key === fileInfo.path
   )
+  const viewModeIndex = fileStore.openEditors.findIndex(el => el.viewMode)
   // 判断是否已被打开，是则直接激活，否则插入新文件内容页
   if (!existFile) {
     const obj = {
@@ -38,6 +39,11 @@ export const activeOpenedFile = (fileInfo: FileInfo, viewMode: boolean) => {
       component: '',
       viewMode
     } as const
+    if (viewModeIndex > -1) {
+      fileStore.$patch(state => {
+        state.openEditors.splice(viewModeIndex, 1, obj)
+      })
+    }
     fileStore.changeCurrentEditor(obj, viewMode)
   } else if (isFileInfo(existFile.file)) {
     fileStore.changeCurrentEditor(existFile, viewMode)

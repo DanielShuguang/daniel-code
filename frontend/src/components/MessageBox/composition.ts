@@ -1,5 +1,5 @@
-import { commandSerivce } from '@/commands'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { commandSerivce, useCommandService } from '@/commands'
+import { computed, onMounted, ref } from 'vue'
 import { MessageOption } from './types'
 import { nanoid } from 'nanoid'
 import { TimeUtils } from '@/utils/time-utils'
@@ -30,27 +30,27 @@ export const useMessageEvents = () => {
     return showList
   })
 
-  onMounted(() => {
-    commandSerivce.registerCommand('dan-code-message', opt => {
-      const key = nanoid()
-      const cfg: Config = {
-        ...opt,
-        key,
-        closable: opt.closable ?? true,
-        timeout: opt.timeout ?? 3 * TimeUtils.SECOND,
-        show: true
-      }
-      messageList.value.push(cfg)
-      if (cfg.timeout) {
-        setTimeout(() => {
-          const target = messageList.value.find(el => el.key === key)
-          if (target) {
-            target.show = false
-          }
-        }, cfg.timeout)
-      }
-    })
+  useCommandService('dan-code-message', opt => {
+    const key = nanoid()
+    const cfg: Config = {
+      ...opt,
+      key,
+      closable: opt.closable ?? true,
+      timeout: opt.timeout ?? 3 * TimeUtils.SECOND,
+      show: true
+    }
+    messageList.value.push(cfg)
+    if (cfg.timeout) {
+      setTimeout(() => {
+        const target = messageList.value.find(el => el.key === key)
+        if (target) {
+          target.show = false
+        }
+      }, cfg.timeout)
+    }
+  })
 
+  onMounted(() => {
     // HACK
     for (let j = 0; j < 5; j++) {
       let str = ''
@@ -59,10 +59,6 @@ export const useMessageEvents = () => {
       }
       messageSerivce({ type: 'info', message: str, timeout: getIntRandom(5) * TimeUtils.SECOND })
     }
-  })
-
-  onUnmounted(() => {
-    commandSerivce.unregisterCommand('dan-code-message')
   })
 
   return { messageList, showMessageList }
