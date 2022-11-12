@@ -2,15 +2,16 @@ import { commandSerivce } from '@/commands'
 import { Nullable } from '@/types/common'
 import { useResizeObserver, useWindowSize } from '@vueuse/core'
 import { onMounted, onUnmounted, Ref, ref, ShallowRef, watch } from 'vue'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { FileEditorOptions } from './types'
 
 /** 自适应更新编辑区的宽高 */
 export const useResizeEditorContainer = () => {
   const containerRect = ref({ width: '0', height: '0' })
-  const classname = '.plugin-toolbar.left-bar[data-code-plugin]'
+  const selector = '.plugin-toolbar.left-bar[data-code-plugin]'
 
   const resize = () => {
-    const dom = document.querySelector<HTMLDivElement>(classname)
+    const dom = document.querySelector<HTMLDivElement>(selector)
     if (dom) {
       const rect = dom.getBoundingClientRect()
       const height = window.innerHeight - 30 - 22 + 'px'
@@ -19,7 +20,7 @@ export const useResizeEditorContainer = () => {
     }
   }
 
-  useResizeObserver(document.querySelector<HTMLDivElement>(classname), () => {
+  useResizeObserver(document.querySelector<HTMLDivElement>(selector), () => {
     resize()
   })
 
@@ -45,11 +46,13 @@ export const useSaveFileContent = (
   const timer = ref<Nullable<NodeJS.Timeout>>(null)
 
   onMounted(() => {
+    commandSerivce.registerCommand('file-get-opend-files', () => containers.value)
     commandSerivce.registerCommand('file-read-current-content', () => {
       const editor = containers.value.get(activeTab.value)
+      if (!editor) return null
       const result = {
-        content: editor?.instance.getValue() || '',
-        hasModified: !!editor?.modified.value,
+        content: editor.instance.getValue() || '',
+        hasModified: !!editor.modified.value,
         filePath: activeTab.value
       }
       if (result.hasModified) {
@@ -69,10 +72,20 @@ export const useSaveFileContent = (
       isSaving.value = false
     })
   })
+
   onUnmounted(() => {
     commandSerivce.unregisterCommand('file-read-current-content')
     commandSerivce.unregisterCommand('file-save-complete')
+    commandSerivce.unregisterCommand('file-get-opend-files')
   })
 
   return { isSaving }
+}
+
+export const editorEventHandler = (monacoInstance: monaco.editor.IStandaloneCodeEditor) => {
+  monacoInstance.onKeyDown(ev => {
+    if (ev.ctrlKey && ev.browserEvent.key === 's') {
+      commandSerivce.execCommand('topmenu-save')
+    }
+  })
 }

@@ -5,8 +5,10 @@ import { debounce } from 'lodash-es'
 import { Quit, WindowIsMaximised, WindowMinimise, WindowToggleMaximise } from 'runtime'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { menuCommands } from './command-handlers'
-import Keymaster from 'keymaster'
+import { Shortcuts } from 'shortcuts'
 import { editMenus, fileMenus } from './data'
+
+const sc = new Shortcuts()
 
 /** 自适应编辑器标题位置 */
 export const useMovingWindowTitle = () => {
@@ -73,9 +75,14 @@ export const useMenusCommandsShortcuts = () => {
   const menus = [...fileMenus, ...editMenus].flatMap(el =>
     el.children ? [el, ...el.children] : [el]
   )
-  menus.forEach(el => {
-    el.shortcut && Keymaster(el.shortcut.toLowerCase(), () => keyDownHandler(el.command as any))
-  })
+  menus.forEach(
+    el =>
+      el.shortcut &&
+      sc.add({
+        shortcut: el.shortcut,
+        handler: () => keyDownHandler(el.command as any)
+      })
+  )
 
   const keyDownHandler = debounce((command?: keyof CommandTypes) => {
     command && commandSerivce.execCommand(command)
@@ -87,8 +94,6 @@ export const useMenusCommandsShortcuts = () => {
 
   onUnmounted(() => {
     commandSerivce.unregisterAll()
-    menus.forEach(el => {
-      el.shortcut && Keymaster.unbind(el.shortcut.toLowerCase())
-    })
+    sc.reset()
   })
 }

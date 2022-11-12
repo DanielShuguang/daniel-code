@@ -10,7 +10,7 @@ import { isFileInfo } from '@/utils/type-check'
 import { messageSerivce } from '../../ui-components/DanMessage/composition'
 import { cloneDeep } from 'lodash-es'
 import { FileInfo } from '@/types/file-system'
-import { useSaveFileContent, useResizeEditorContainer } from './composition'
+import { useSaveFileContent, useResizeEditorContainer, editorEventHandler } from './composition'
 import { langsMap } from '@/utils/language'
 import { useEventListener } from '@vueuse/core'
 import { FileEditorOptions } from './types'
@@ -71,6 +71,7 @@ const handleChangeTab = async (key: KeyTypes) => {
         file && renderEditor(file)
       }
     } else {
+      // TODO: 自定义窗口
     }
     fileStore.changeCurrentEditor(editor, editor.viewMode)
   }
@@ -94,6 +95,7 @@ const renderEditor = (editor: FileInfo) => {
       target.modified.value = true
     }
   })
+  editorEventHandler(monacoInstance)
   editorContainers.value.set(editor.path, { instance: monacoInstance, modified: ref(false) })
 }
 

@@ -23,3 +23,9 @@ export interface EditorDetails {
   viewMode: boolean
   file?: FileInfo
 }
+
+export interface CurrentFileBase {
+  content: string
+  hasModified: boolean
+  filePath: string
+}

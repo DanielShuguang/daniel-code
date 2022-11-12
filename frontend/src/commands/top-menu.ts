@@ -1,3 +1,5 @@
+import { CurrentFileBase } from '@/types/file-system'
+
 export type TopMenuCommands = FileMenuCommands & EditMenuCommands
 
 export interface FileMenuCommands {
@@ -9,7 +11,7 @@ export interface FileMenuCommands {
   'topmenu-open-folder': () => void
   'topmenu-open-recent-file': () => void
 
-  'topmenu-save': () => void
+  'topmenu-save': (file?: CurrentFileBase) => void
   'topmenu-save-as': () => void
   'topmenu-save-all': () => void
 

@@ -20,6 +20,7 @@
     "monaco-editor": "^0.34.1",
     "nanoid": "^4.0.0",
     "pinia": "2.0.0-rc.10",
+    "shortcuts": "^2.0.0",
     "vue": "^3.2.37"
   },
   "devDependencies": {

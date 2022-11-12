@@ -57,7 +57,7 @@ export const useMessageEvents = () => {
       for (let i = 0; i < 50; i++) {
         str += `message-test${j} `
       }
-      messageSerivce({ type: 'info', message: str, timeout: getIntRandom(0, 5) * TimeUtils.SECOND })
+      messageSerivce({ type: 'info', message: str, timeout: getIntRandom(5) * TimeUtils.SECOND })
     }
   })
 
