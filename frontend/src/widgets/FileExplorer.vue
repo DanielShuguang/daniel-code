@@ -16,21 +16,19 @@ const handleFolderExpand = async (node: FileTreeNode) => {
   if (willExpand) {
     children = await loadFolderDetails(node)
   }
-  projectStore.$patch(state => {
-    if (!state.currentProject?.children?.length) {
-      return
+  if (!projectStore.$state.currentProject?.children?.length) {
+    return
+  }
+  const target = breadthFirstSearch(
+    projectStore.$state.currentProject.children,
+    item => item.isDir && item.path === node.path
+  )
+  if (target) {
+    target.isExpanded = willExpand
+    if (willExpand && target.hasChildren) {
+      target.children = children
     }
-    const target = breadthFirstSearch(
-      state.currentProject.children,
-      item => item.isDir && item.path === node.path
-    )
-    if (target) {
-      target.isExpanded = willExpand
-      if (willExpand && target.hasChildren) {
-        target.children = children
-      }
-    }
-  })
+  }
 }
 
 const loadFolderDetails = async (folder: FileTreeNode) => {

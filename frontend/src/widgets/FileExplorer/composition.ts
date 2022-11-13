@@ -59,14 +59,15 @@ export const useFolderWatcher = () => {
 
   const handleUpdateProject = debounce(async (prjPath: string) => {
     const result = await ReadDirTree(prjPath)
-    projectStore.$patch(state => {
-      if (!result.message && result.data) {
-        overwriteProject(result.data.children || [], state.currentProject?.children || [])
-        state.currentProject = result.data
-      } else {
-        logger.warn(result.message ?? '')
-      }
-    })
+    if (!result.message && result.data) {
+      overwriteProject(
+        result.data.children || [],
+        projectStore.$state.currentProject?.children || []
+      )
+      projectStore.$state.currentProject = result.data
+    } else {
+      logger.warn(result.message ?? '')
+    }
   }, 500)
 
   const overwriteProject = (newPro: FileTreeNode[], oldPro: FileTreeNode[]) => {

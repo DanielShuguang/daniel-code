@@ -14,10 +14,10 @@ export const useWindowsFocusHandler = () => {
 
   onBeforeMount(() => {
     window.onblur = () => {
-      baseStore.$patch({ isWindowActive: false })
+      baseStore.$state.isWindowActive = false
     }
     window.onfocus = () => {
-      baseStore.$patch({ isWindowActive: true })
+      baseStore.$state.isWindowActive = true
     }
   })
 }
@@ -37,7 +37,7 @@ export const useInitEditorInfo = () => {
   const initProject = () => {
     const activeProject = codeLocalStorage.get('active-project')
     if (activeProject) {
-      projectStore.$patch({ currentProject: activeProject })
+      projectStore.$state.currentProject = activeProject
       EventsEmit('backend:update-project-path', activeProject.path)
     }
     initFile(!!activeProject)
@@ -60,7 +60,7 @@ export const useInitEditorInfo = () => {
       return true
     })
     if (shouldOpen) {
-      fileStore.$patch(state => (state.openEditors = editors))
+      fileStore.$state.openEditors = editors
       const activeFile = codeLocalStorage.get('active-editor')
       const obj = activeFile ?? editors[0]
       fileStore.changeCurrentEditor(obj, obj?.viewMode ?? false)

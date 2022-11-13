@@ -40,9 +40,7 @@ export const activeOpenedFile = (fileInfo: FileInfo, viewMode: boolean) => {
       viewMode
     } as const
     if (viewModeIndex > -1) {
-      fileStore.$patch(state => {
-        state.openEditors.splice(viewModeIndex, 1, obj)
-      })
+      fileStore.$state.openEditors.splice(viewModeIndex, 1, obj)
     }
     fileStore.changeCurrentEditor(obj, viewMode)
   } else if (isFileInfo(existFile.file)) {

@@ -29,7 +29,7 @@ export const fileCommandHandlers = () => {
   commandSerivce.registerCommand('topmenu-open-folder', async () => {
     const result = await OpenFolderByDialog()
     if (!result.message && result.data && projectStore.currentProject?.path !== result.data.path) {
-      projectStore.$patch({ currentProject: result.data })
+      projectStore.$state.currentProject = result.data
       EventsEmit('backend:update-project-path', result.data.path)
     } else if (result.message && result.message !== 'cancel') {
       logger.error(result.message)

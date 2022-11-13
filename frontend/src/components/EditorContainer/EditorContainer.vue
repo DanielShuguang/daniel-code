@@ -46,7 +46,7 @@ const handleCloseTab = (key: KeyTypes) => {
         fileStore.changeCurrentEditor(current, current.viewMode)
       }
     }
-    fileStore.$patch(state => state.openEditors.splice(index, 1))
+    fileStore.$state.openEditors.splice(index, 1)
   }
 }
 const handleChangeTab = async (key: KeyTypes) => {
@@ -93,12 +93,10 @@ const renderEditor = (editor: FileInfo) => {
     const target = editorContainers.value.get(key)
     if (target) {
       target.modified.value = true
-      fileStore.$patch(state => {
-        const ed = state.openEditors.find(el => el.key === key)
-        if (ed) {
-          ed.viewMode = false
-        }
-      })
+      const ed = fileStore.$state.openEditors.find(el => el.key === key)
+      if (ed) {
+        ed.viewMode = false
+      }
     }
   })
   editorEventHandler(monacoInstance)
@@ -106,12 +104,10 @@ const renderEditor = (editor: FileInfo) => {
 }
 
 const handleDbClick = (tabKey: KeyTypes) => {
-  fileStore.$patch(state => {
-    const target = state.openEditors.find(el => el.key === tabKey)
-    if (target) {
-      target.viewMode = false
-    }
-  })
+  const target = fileStore.$state.openEditors.find(el => el.key === tabKey)
+  if (target) {
+    target.viewMode = false
+  }
 }
 
 /** 确认 tab 是否为预览状态 */
