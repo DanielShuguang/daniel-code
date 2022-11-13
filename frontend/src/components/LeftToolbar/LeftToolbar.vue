@@ -3,7 +3,7 @@ import { usePluginStore } from '@/store'
 import { plugins } from './data'
 import { Plugin } from './types'
 import DanSplitLine from '@/ui-components/DanSplitLine.vue'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, h, ref } from 'vue'
 import classNames from 'classnames'
 import { isString } from 'lodash-es'
 import DynamicComponent from '../DynamicComponent.vue'
@@ -37,7 +37,7 @@ export default defineComponent({
         return isString(target.component) ? (
           <DynamicComponent name={target.component} />
         ) : (
-          target.component
+          h(target.component)
         )
       }
       return null

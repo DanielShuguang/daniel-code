@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { isDev } from '@/utils/env-tools'
-import BottomStatusBar from './BottomStatusBar.vue'
+import BottomStatusBar from './BottomStatusBar/BottomStatusBar.vue'
 import EditorContainer from './EditorContainer/EditorContainer.vue'
 import HeaderMenuBar from './HeaderMenuBar/HeaderMenuBar.vue'
 import LeftToolBar from './LeftToolbar/LeftToolbar.vue'
