@@ -5,8 +5,10 @@ import { FileTreeNode } from '@/ui-components/DanFileTree/types'
 import { breadthFirstSearch } from '@/utils/tree-search'
 import { ReadDirTree } from 'backend/core/App'
 import { messageSerivce } from '@/components/MessageBox/composition'
+import { useFolderWatcher } from './FileExplorer/composition'
 
 const projectStore = useProjectSystemStore()
+useFolderWatcher()
 
 const handleFolderExpand = async (node: FileTreeNode) => {
   const willExpand = !node.isExpanded

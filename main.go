@@ -16,12 +16,13 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:            "daniel-code",
-		Width:            1024,
-		Height:           768,
-		Assets:           assets,
-		OnStartup:        app.Startup,
-		Frameless:        true,
+		Title:      "daniel-code",
+		Width:      1024,
+		Height:     768,
+		Assets:     assets,
+		OnStartup:  app.Startup,
+		Frameless:  true,
+		OnShutdown: app.Shutdown,
 		Bind: []interface{}{
 			app,
 		},

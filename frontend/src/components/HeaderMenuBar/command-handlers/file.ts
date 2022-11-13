@@ -4,6 +4,7 @@ import { useFileSystemStore, useProjectSystemStore } from '@/store'
 import { logger } from '@/utils/logger'
 import { ModifyFileContent, OpenFileByDialog, OpenFolderByDialog } from 'backend/core/App'
 import { isFileInfo } from '@/utils/type-check'
+import { EventsEmit } from 'runtime'
 
 export const fileCommandHandlers = () => {
   const projectStore = useProjectSystemStore()
@@ -29,6 +30,7 @@ export const fileCommandHandlers = () => {
     const result = await OpenFolderByDialog()
     if (!result.message && result.data && projectStore.currentProject?.path !== result.data.path) {
       projectStore.$patch({ currentProject: result.data })
+      EventsEmit('backend:update-project-path', result.data.path)
     } else if (result.message && result.message !== 'cancel') {
       logger.error(result.message)
     }

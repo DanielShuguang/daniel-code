@@ -53,3 +53,9 @@ type ModifyFileContentResult struct {
 	Success bool   `json:"success"`
 	Message string `json:"message,omitempty"`
 }
+
+type FolderWatchInfo struct {
+	Content string `json:"content"`
+	Origin  string `json:"origin"`
+	New     string `json:"new"`
+}

@@ -4,6 +4,7 @@ import { codeLocalStorage } from '@/utils/storage'
 import { TimeUtils } from '@/utils/time-utils'
 import { isFileInfo } from '@/utils/type-check'
 import { debounce } from 'lodash-es'
+import { EventsEmit } from 'runtime'
 import { onBeforeMount, onMounted, watch } from 'vue'
 import { plugins } from '../LeftToolbar/data'
 
@@ -37,6 +38,7 @@ export const useInitEditorInfo = () => {
     const activeProject = codeLocalStorage.get('active-project')
     if (activeProject) {
       projectStore.$patch({ currentProject: activeProject })
+      EventsEmit('backend:update-project-path', activeProject.path)
     }
     initFile(!!activeProject)
   }

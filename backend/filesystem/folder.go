@@ -10,6 +10,18 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
+// 监听获取项目地址，并启动文件系统监听
+func InitProjectPath(ctx context.Context) {
+	runtime.EventsOn(ctx, "backend:update-project-path", func(data ...interface{}) {
+		prjPath := data[0]
+		if val, ok := prjPath.(string); ok {
+			// 使用 channel 传递上下文，避免数据竞争导致阻塞
+			c := make(chan context.Context, 1)
+			FsWatchStart(c, val)
+		}
+	})
+}
+
 // 是否为空文件夹
 func IsEmptyFolder(path string) bool {
 	entries, err := os.ReadDir(path)
