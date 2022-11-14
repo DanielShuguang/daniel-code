@@ -16,6 +16,7 @@ import { useEventListener } from '@vueuse/core'
 import { FileEditorOptions } from './types'
 import { codicon } from '@/utils/codicon'
 import classNames from 'classnames'
+import { useCommandService } from '@/commands'
 
 const fileStore = useFileSystemStore()
 
@@ -30,6 +31,7 @@ useEventListener('keydown', ev => {
     handleCloseTab(fileStore.currentEditor.key)
   }
 })
+useCommandService('file-close-editor-tab', key => handleCloseTab(key))
 
 const handleCloseTab = (key: KeyTypes) => {
   const index = fileStore.openEditors.findIndex(el => el.key === key)

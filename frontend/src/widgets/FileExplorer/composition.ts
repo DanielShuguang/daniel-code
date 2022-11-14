@@ -1,3 +1,4 @@
+import { commandSerivce } from '@/commands'
 import { useFileSystemStore, useProjectSystemStore } from '@/store'
 import { FileInfo } from '@/types/file-system'
 import { FileTreeNode } from '@/ui-components/DanFileTree/types'
@@ -6,7 +7,7 @@ import { isFileInfo } from '@/utils/type-check'
 import { ReadDirTree, ReadFileContent } from 'backend/core/App'
 import { cloneDeep, debounce } from 'lodash-es'
 import { EventsOff, EventsOn } from 'runtime'
-import { onUnmounted } from 'vue'
+import { nextTick, onUnmounted, toRaw } from 'vue'
 import { FolderWatchInfo } from './types'
 
 const eventName = 'backend:folder-update'
@@ -29,30 +30,26 @@ export const useFolderWatcher = () => {
   })
 
   const updateEditor = debounce(async (info: FolderWatchInfo) => {
-    const target = fileStore.$state.openEditors.find(
+    const index = fileStore.$state.openEditors.findIndex(
       el => isFileInfo(el.file) && el.key === info.origin
     )
-    if (target) {
+    if (index > -1) {
+      const originActiveKey = fileStore.$state.currentEditor?.key
+      const target = cloneDeep(fileStore.$state.openEditors[index])
+      await commandSerivce.execCommand('file-close-editor-tab', target.key)
       const file = target.file as FileInfo
-      const res = await ReadFileContent(file.path)
+      target.key = info.new
+      target.name = info.new.split(/(\\|\/)/).pop() ?? ''
+      fileStore.$state.openEditors.splice(index, 0, target)
       file.path = info.new
-      file.name = info.new.split(/(\\|\/)/).pop() ?? ''
+      file.name = target.name
       file.type = file.name.split('.').pop() ?? 'None'
-      if (res.content) {
-        file.content = [res.content]
-      }
-      if (fileStore.$state.currentEditor?.key === file.path) {
-        fileStore.changeCurrentEditor(
-          {
-            component: '',
-            key: file.path,
-            type: 'file',
-            name: file.name,
-            viewMode: fileStore.$state.currentEditor.viewMode,
-            file: file
-          },
-          fileStore.$state.currentEditor.viewMode
-        )
+      if (originActiveKey === info.origin) {
+        const res = await ReadFileContent(file.path)
+        if (res.content) {
+          file.content = [res.content]
+        }
+        fileStore.changeCurrentEditor(target, target.viewMode)
       }
     }
   }, 500)

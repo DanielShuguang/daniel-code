@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useCommandService } from '@/commands'
 import { useEventListener } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useMessageEvents } from './composition'
@@ -7,6 +8,9 @@ import MessageItem from './MessageItem.vue'
 const showMsgBox = ref(false)
 
 const { messageList, showMessageList } = useMessageEvents()
+useCommandService('dan-code-open-message-box', () => {
+  showMsgBox.value = !showMsgBox.value
+})
 useEventListener('keydown', ev => {
   if (ev.key === 'Escape') {
     showMsgBox.value = false

@@ -1,3 +1,4 @@
+import { commandSerivce } from '@/commands'
 import { useFileSystemStore } from '@/store'
 import { FileInfo } from '@/types/file-system'
 import { isFileInfo } from '@/utils/type-check'
@@ -23,7 +24,7 @@ export const handleOpenFile = async (fileNode: FileTreeNode, viewMode: boolean) 
  * 激活/打开文件
  * @param fileInfo
  */
-export const activeOpenedFile = (fileInfo: FileInfo, viewMode: boolean) => {
+export const activeOpenedFile = async (fileInfo: FileInfo, viewMode: boolean) => {
   const fileStore = useFileSystemStore()
   const existFile = fileStore.openEditors.find(
     editor => isFileInfo(editor.file) && editor.key === fileInfo.path
@@ -40,7 +41,11 @@ export const activeOpenedFile = (fileInfo: FileInfo, viewMode: boolean) => {
       viewMode
     } as const
     if (viewModeIndex > -1) {
-      fileStore.$state.openEditors.splice(viewModeIndex, 1, obj)
+      await commandSerivce.execCommand(
+        'file-close-editor-tab',
+        fileStore.$state.openEditors[viewModeIndex].key
+      )
+      fileStore.$state.openEditors.splice(viewModeIndex, 0, obj)
     }
     fileStore.changeCurrentEditor(obj, viewMode)
   } else if (isFileInfo(existFile.file)) {

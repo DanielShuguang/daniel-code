@@ -1,9 +1,15 @@
 <script lang="ts" setup>
+import { commandSerivce } from '@/commands'
 import { codicon } from '@/utils/codicon'
+
+/** 开启/关闭消息盒子 */
+const handleToggleMessageBox = () => {
+  commandSerivce.execCommand('dan-code-open-message-box')
+}
 </script>
 
 <template>
-  <div class="message-box-btn bottom-tool-item">
+  <div class="message-box-btn bottom-tool-item" @click="handleToggleMessageBox">
     <a :class="['btn-icon', codicon('bell')]"></a>
   </div>
 </template>

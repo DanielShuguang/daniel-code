@@ -78,7 +78,9 @@ export default {
   }
   .file-name {
     flex: 1;
+    height: 22px;
     margin-right: 5px;
+    line-height: 22px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

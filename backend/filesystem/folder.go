@@ -15,9 +15,7 @@ func InitProjectPath(ctx context.Context) {
 	runtime.EventsOn(ctx, "backend:update-project-path", func(data ...interface{}) {
 		prjPath := data[0]
 		if val, ok := prjPath.(string); ok {
-			// 使用 channel 传递上下文，避免数据竞争导致阻塞
-			c := make(chan context.Context, 1)
-			FsWatchStart(c, val)
+			FsWatchStart(ctx, val)
 		}
 	})
 }
