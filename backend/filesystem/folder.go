@@ -12,10 +12,13 @@ import (
 
 // 监听获取项目地址，并启动文件系统监听
 func InitProjectPath(ctx context.Context) {
+	c, cancel := context.WithCancel(ctx)
 	runtime.EventsOn(ctx, "backend:update-project-path", func(data ...interface{}) {
+		cancel()
 		prjPath := data[0]
 		if val, ok := prjPath.(string); ok {
-			FsWatchStart(ctx, val)
+			c, cancel = context.WithCancel(ctx)
+			FsWatchStart(c, val)
 		}
 	})
 }
