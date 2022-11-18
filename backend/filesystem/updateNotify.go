@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/fsnotify/fsnotify"
+	"github.com/pkg/errors"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -59,7 +60,7 @@ func FsWatchStart(ctx context.Context, dirPath string) {
 				}
 			case err, ok := <-watch.Errors:
 				if ok {
-					eventStart(c, fmt.Sprintf("error: %v", err), "", "")
+					eventStart(c, errors.Wrap(err, "error").Error(), "", "")
 					return
 				}
 			}

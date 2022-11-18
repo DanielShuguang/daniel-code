@@ -7,6 +7,7 @@ import (
 	osRuntime "runtime"
 	"sort"
 
+	"github.com/pkg/errors"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -80,7 +81,7 @@ func OpenFolderByDialog(ctx context.Context) FileTreeResult {
 		Data: DirTree{},
 	}
 	if err != nil {
-		result.Message = fmt.Sprintf("读取目录失败: %s", err.Error())
+		result.Message = errors.Wrap(err, "读取目录失败").Error()
 		return result
 	} else if path == "" {
 		result.Message = "cancel"

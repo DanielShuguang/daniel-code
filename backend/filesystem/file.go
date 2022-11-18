@@ -4,11 +4,11 @@ import (
 	"bufio"
 	"changeme/backend/utils"
 	"context"
-	"fmt"
 	"io"
 	"os"
 	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -62,7 +62,7 @@ func ReadFileContent(filePath string) FileContentResult {
 	}
 	file, err := os.Open(filePath)
 	if err != nil {
-		result.Message = fmt.Sprintf("打开文件错误: %s", err.Error())
+		result.Message = errors.Wrap(err, "打开文件错误").Error()
 		return result
 	}
 
@@ -75,7 +75,7 @@ func ReadFileContent(filePath string) FileContentResult {
 
 	content, err := os.ReadFile(filePath)
 	if err != nil {
-		result.Message = fmt.Sprintf("文件内容读取错误: %s", err.Error())
+		result.Message = errors.Wrap(err, "文件内容读取错误").Error()
 		return result
 	}
 	result.Content = utils.Bytes2String(content)
@@ -87,7 +87,7 @@ func OpenFileByDialog(ctx context.Context) FileDetails {
 	path, err := runtime.OpenFileDialog(ctx, runtime.OpenDialogOptions{})
 	result := FileDetails{Message: ""}
 	if err != nil {
-		result.Message = fmt.Sprintf("打开资源管理器失败: %s", err.Error())
+		result.Message = errors.Wrap(err, "打开资源管理器失败").Error()
 		return result
 	} else if path == "" {
 		result.Message = "cancel"
@@ -113,7 +113,7 @@ func ModifyFileContent(path, content string) ModifyFileContentResult {
 	}
 	err := os.WriteFile(path, utils.String2Bytes(content), 0)
 	if err != nil {
-		result.Message = fmt.Sprintf("保存失败: %s", err.Error())
+		result.Message = errors.Wrap(err, "保存失败").Error()
 	} else {
 		result.Success = true
 	}
