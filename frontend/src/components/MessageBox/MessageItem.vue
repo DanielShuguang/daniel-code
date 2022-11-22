@@ -6,6 +6,7 @@ import { MessageOption } from './types'
 
 const props = defineProps<{
   messageOpt: MessageOption
+  autoClose?: boolean
 }>()
 const emit = defineEmits<{
   (event: 'close'): void
@@ -13,7 +14,7 @@ const emit = defineEmits<{
 
 onMounted(() => {
   const { timeout = 3 * TimeUtils.SECOND } = props.messageOpt
-  if (timeout) {
+  if (timeout && props.autoClose) {
     setTimeout(() => {
       emit('close')
     }, timeout)
@@ -46,7 +47,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 .notifications-list-row {
   display: flex;
-  margin: 6px;
   padding: 5px 4px 7px;
   background: var(--message-container-background);
   cursor: pointer;
