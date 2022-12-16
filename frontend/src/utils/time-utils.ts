@@ -1,8 +1,8 @@
 export enum TimeUtils {
-  MILLISECOND = 1,
-  SECOND = 1000 * TimeUtils.MILLISECOND,
-  MINUTE = 60 * TimeUtils.SECOND,
-  HOUR = 60 * TimeUtils.MINUTE,
-  DAY = 24 * TimeUtils.HOUR,
-  WEEK = 7 * TimeUtils.DAY
+  Millisecond = 1,
+  Second = 1000 * Millisecond,
+  Minute = 60 * Second,
+  Hour = 60 * Minute,
+  Day = 24 * Hour,
+  Week = 7 * Day
 }

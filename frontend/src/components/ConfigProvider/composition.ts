@@ -89,7 +89,7 @@ export const useUpdateEditorsStorage = () => {
 
   const cacheProject = debounce(() => {
     codeLocalStorage.set('active-project', projectStore.currentProject)
-  }, TimeUtils.SECOND * 5)
+  }, TimeUtils.Second * 5)
 
   watch(
     () => fileStore.openEditors,

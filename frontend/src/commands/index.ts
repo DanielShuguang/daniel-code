@@ -6,6 +6,9 @@ import { TopMenuCommands } from './top-menu'
 
 export type CommandTypes = TopMenuCommands & MessageCommands & FileCommands
 
+/**
+ * 命令集合服务（一个on响应多个emit，有返回值）
+ */
 export class CommandSerivce {
   private static instance: CommandSerivce
   static getInstance = () => {
@@ -17,9 +20,6 @@ export class CommandSerivce {
 
   private commands: Map<string | symbol, Function> = new Map()
 
-  /**
-   * 命令集合服务（一个on响应多个emit，有返回值）
-   */
   private constructor() {}
 
   registerCommand = <E extends keyof CommandTypes>(cmd: E, fn: CommandTypes[E]) => {

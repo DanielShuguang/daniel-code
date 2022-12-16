@@ -7,7 +7,7 @@ import { isFileInfo } from '@/utils/type-check'
 import { ReadDirTree, ReadFileContent } from 'backend/core/App'
 import { cloneDeep, debounce } from 'lodash-es'
 import { EventsOff, EventsOn } from 'runtime'
-import { nextTick, onUnmounted, toRaw } from 'vue'
+import { onUnmounted } from 'vue'
 import { FolderWatchInfo } from './types'
 
 const eventName = 'backend:folder-update'
@@ -16,7 +16,7 @@ export const useFolderWatcher = () => {
   const projectStore = useProjectSystemStore()
   const fileStore = useFileSystemStore()
 
-  EventsOn(eventName, (info: FolderWatchInfo) => {
+  EventsOn(eventName, async (info: FolderWatchInfo) => {
     const currentProject = cloneDeep(projectStore.$state.currentProject)
     if (!currentProject?.children?.length) return
 
@@ -25,6 +25,12 @@ export const useFolderWatcher = () => {
       handleUpdateProject(projectPath)
       if (info.content === 'rename') {
         updateEditor(info)
+      }
+    } else if (info.content === 'write') {
+      const target = fileStore.$state.openEditors.find(el => el.file?.path === info.origin)
+      if (target) {
+        const res = await ReadFileContent(info.origin)
+        res.content && commandSerivce.execCommand('file-updated', target.key, res.content)
       }
     }
   })

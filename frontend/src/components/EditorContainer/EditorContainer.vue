@@ -32,11 +32,20 @@ useEventListener('keydown', ev => {
   }
 })
 useCommandService('file-close-editor-tab', key => handleCloseTab(key))
+useCommandService('file-updated', (key, content) => {
+  const editor = editorContainers.value.get(key)
+  if (editor) {
+    editor.instance.setValue(content)
+    nextTick(() => {
+      editor.modified.value = false
+    })
+  }
+})
 
 const handleCloseTab = (key: KeyTypes) => {
-  const index = fileStore.openEditors.findIndex(el => el.key === key)
+  const { openEditors } = fileStore
+  const index = openEditors.findIndex(el => el.key === key)
   if (index !== -1) {
-    const { openEditors } = fileStore
     const key = openEditors[index].key
     editorContainers.value.get(key)?.instance?.dispose()
     editorContainers.value.delete(key)
@@ -44,8 +53,10 @@ const handleCloseTab = (key: KeyTypes) => {
       if (openEditors.length === 1) {
         fileStore.changeCurrentEditor(null, false)
       } else {
-        const current = openEditors[index ? index - 1 : 0]
-        fileStore.changeCurrentEditor(current, current.viewMode)
+        nextTick(() => {
+          const current = openEditors[index ? index - 1 : 0]
+          fileStore.changeCurrentEditor(current, current.viewMode)
+        })
       }
     }
     fileStore.$state.openEditors.splice(index, 1)

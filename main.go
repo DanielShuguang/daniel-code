@@ -23,7 +23,7 @@ func main() {
 		OnStartup:  app.Startup,
 		Frameless:  true,
 		OnShutdown: app.Shutdown,
-		Bind: []interface{}{
+		Bind: []any{
 			app,
 		},
 	})

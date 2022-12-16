@@ -1,26 +1,24 @@
-import { commandSerivce } from '@/commands'
-import { TopMenuCommands } from '@/commands/top-menu'
+import { commandSerivce, CommandTypes } from '@/commands'
 import { Nullable } from '@/types/common'
+import { isElement } from 'lodash-es'
 import { Directive } from 'vue'
 
-export const command: Directive<HTMLElement, Nullable<keyof TopMenuCommands>> = {
+export const command: Directive<HTMLElement, Nullable<keyof CommandTypes>> = {
   mounted(el, binding) {
-    const cmd = binding.value
-    if (cmd) {
-      el.onclick = () => {
-        commandSerivce.execCommand(cmd)
-      }
-    }
+    mountCommander(el, binding.value)
   },
   updated(el, binding) {
-    const cmd = binding.value
-    if (cmd) {
-      el.onclick = () => {
-        commandSerivce.execCommand(cmd)
-      }
-    }
+    mountCommander(el, binding.value)
   },
   unmounted(el) {
     el.onclick = null
+  }
+}
+
+const mountCommander = (el: HTMLElement, cmd: Nullable<keyof CommandTypes>) => {
+  if (!isElement(el) || !cmd) return
+
+  el.onclick = () => {
+    commandSerivce.execCommand(cmd)
   }
 }

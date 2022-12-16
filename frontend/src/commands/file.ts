@@ -7,4 +7,5 @@ export interface FileCommands {
   'file-read-current-content': () => Nullable<CurrentFileBase>
   'file-close-editor-tab': (tabKey: string) => void
   'file-save-complete': (tabKey: string) => void
+  'file-updated': (fileKey: string, content: string) => void
 }

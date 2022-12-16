@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import { commandSerivce } from '@/commands'
+import { useMessageStore } from '@/store'
 import { codicon } from '@/utils/codicon'
+import { computed } from 'vue'
 
-/** 开启/关闭消息盒子 */
-const handleToggleMessageBox = () => {
-  commandSerivce.execCommand('dan-code-open-message-box')
-}
+const messageStore = useMessageStore()
+
+const hasMessage = computed(() => messageStore.$state.messageCount !== 0)
 </script>
 
 <template>
-  <div class="message-box-btn bottom-tool-item" @click="handleToggleMessageBox">
-    <a :class="['btn-icon', codicon('bell')]"></a>
+  <div class="message-box-btn bottom-tool-item" v-command="'dan-code-open-message-box'">
+    <a :class="['btn-icon', codicon(hasMessage ? 'bell-dot' : 'bell')]"></a>
   </div>
 </template>
 

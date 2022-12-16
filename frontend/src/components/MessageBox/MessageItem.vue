@@ -13,7 +13,7 @@ const emit = defineEmits<{
 }>()
 
 onMounted(() => {
-  const { timeout = 3 * TimeUtils.SECOND } = props.messageOpt
+  const { timeout = 3 * TimeUtils.Second } = props.messageOpt
   if (timeout && props.autoClose) {
     setTimeout(() => {
       emit('close')

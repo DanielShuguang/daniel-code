@@ -42,7 +42,7 @@ export const useSWR = <R>(key: string, fn: (key: string) => Promise<R>, option?:
       content.error.value = err.message
     } finally {
       content.isValidating.value = false
-      const delayTime = opt.value.delay ? opt.value.delay * TimeUtils.SECOND : 5 * TimeUtils.MINUTE
+      const delayTime = opt.value.delay ? opt.value.delay * TimeUtils.Second : 5 * TimeUtils.Minute
       setTimeout(run, delayTime)
     }
   }

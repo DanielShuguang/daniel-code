@@ -1,9 +1,9 @@
 import { commandSerivce, useCommandService } from '@/commands'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { MessageOption } from './types'
 import { nanoid } from 'nanoid'
 import { TimeUtils } from '@/utils/time-utils'
-import { getIntRandom } from '@/utils/random'
+import { useMessageStore } from '@/store'
 
 interface Config extends MessageOption {
   key: string
@@ -19,6 +19,8 @@ export const messageSerivce = (opt: MessageOption) => {
 }
 
 export const useMessageEvents = () => {
+  const messageStore = useMessageStore()
+
   const messageList = ref<Config[]>([])
   const showMessageList = computed(() => {
     const showList: Config[] = []
@@ -36,7 +38,7 @@ export const useMessageEvents = () => {
       ...opt,
       key,
       closable: opt.closable ?? true,
-      timeout: opt.timeout ?? 3 * TimeUtils.SECOND,
+      timeout: opt.timeout ?? 3 * TimeUtils.Second,
       show: true
     }
     messageList.value.push(cfg)
@@ -50,15 +52,8 @@ export const useMessageEvents = () => {
     }
   })
 
-  onMounted(() => {
-    // HACK
-    for (let j = 0; j < 5; j++) {
-      let str = ''
-      for (let i = 0; i < 50; i++) {
-        str += `message-test${j} `
-      }
-      messageSerivce({ type: 'info', message: str, timeout: getIntRandom(5) * TimeUtils.SECOND })
-    }
+  watch(messageList, list => {
+    messageStore.$state.messageCount = list.length
   })
 
   return { messageList, showMessageList }

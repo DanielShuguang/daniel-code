@@ -14,7 +14,7 @@ import (
 // 监听获取项目地址，并启动文件系统监听
 func InitProjectPath(ctx context.Context) {
 	c, cancel := context.WithCancel(ctx)
-	runtime.EventsOn(ctx, "backend:update-project-path", func(data ...interface{}) {
+	runtime.EventsOn(ctx, "backend:update-project-path", func(data ...any) {
 		cancel()
 		prjPath := data[0]
 		if val, ok := prjPath.(string); ok {

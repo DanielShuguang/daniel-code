@@ -10,6 +10,7 @@ const showMsgBox = ref(false)
 
 const { messageList, showMessageList } = useMessageEvents()
 useCommandService('dan-code-open-message-box', () => {
+  messageList.value.forEach(el => (el.show = false))
   showMsgBox.value = !showMsgBox.value
 })
 useEventListener('keydown', ev => {
