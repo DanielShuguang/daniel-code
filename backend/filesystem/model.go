@@ -3,15 +3,15 @@ package filesystem
 import "strings"
 
 type DirTree struct {
-	Name        string    `json:"name"`
-	Path        string    `json:"path"`
-	IsDir       bool      `json:"isDir"`
-	Type        string    `json:"type"`
-	HasChildren bool      `json:"hasChildren"`
-	Children    []DirTree `json:"children,omitempty"`
+	Name        string     `json:"name"`
+	Path        string     `json:"path"`
+	IsDir       bool       `json:"isDir"`
+	Type        string     `json:"type"`
+	HasChildren bool       `json:"hasChildren"`
+	Children    []*DirTree `json:"children,omitempty"`
 }
 
-type SortByDirTree []DirTree
+type SortByDirTree []*DirTree
 
 func (a SortByDirTree) Len() int {
 	return len(a)

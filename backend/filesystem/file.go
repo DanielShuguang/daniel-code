@@ -57,41 +57,41 @@ func isBinaryFile(file io.Reader) bool {
 
 // 读取文件详细信息及其文本内容
 func ReadFileContent(filePath string) FileContentResult {
-	result := FileContentResult{
+	result := &FileContentResult{
 		Content: "", Message: "", IsBinary: false,
 	}
 	file, err := os.Open(filePath)
 	if err != nil {
 		result.Message = errors.Wrap(err, "打开文件错误").Error()
-		return result
+		return *result
 	}
 
 	if isBinaryFile(file) {
 		result.IsBinary = true
 		result.Message = "该文件为二进制文件"
-		return result
+		return *result
 	}
 	file.Close()
 
 	content, err := os.ReadFile(filePath)
 	if err != nil {
 		result.Message = errors.Wrap(err, "文件内容读取错误").Error()
-		return result
+		return *result
 	}
 	result.Content = utils.Bytes2String(content)
-	return result
+	return *result
 }
 
 // 弹窗打开文件
 func OpenFileByDialog(ctx context.Context) FileDetails {
 	path, err := runtime.OpenFileDialog(ctx, runtime.OpenDialogOptions{})
-	result := FileDetails{Message: ""}
+	result := &FileDetails{Message: ""}
 	if err != nil {
 		result.Message = errors.Wrap(err, "打开资源管理器失败").Error()
-		return result
+		return *result
 	} else if path == "" {
 		result.Message = "cancel"
-		return result
+		return *result
 	}
 	file := ReadFileContent(path)
 	result.IsBinary = file.IsBinary
@@ -103,12 +103,12 @@ func OpenFileByDialog(ctx context.Context) FileDetails {
 	if strings.Contains(result.Name, ".") {
 		result.Type = GetFileTypeByName(result.Name)
 	}
-	return result
+	return *result
 }
 
 // 修改文件内容
 func ModifyFileContent(path, content string) ModifyFileContentResult {
-	result := ModifyFileContentResult{
+	result := &ModifyFileContentResult{
 		Success: false,
 	}
 	err := os.WriteFile(path, utils.String2Bytes(content), 0)
@@ -117,5 +117,5 @@ func ModifyFileContent(path, content string) ModifyFileContentResult {
 	} else {
 		result.Success = true
 	}
-	return result
+	return *result
 }

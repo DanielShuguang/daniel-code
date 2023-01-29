@@ -41,7 +41,7 @@ func ReadFolderDetails(dirTree *DirTree) error {
 	}
 	dirTree.HasChildren = len(entries) != 0
 	if dirTree.Children == nil {
-		dirTree.Children = []DirTree{}
+		dirTree.Children = []*DirTree{}
 	}
 	for _, entry := range entries {
 		isDir := entry.IsDir()
@@ -59,7 +59,7 @@ func ReadFolderDetails(dirTree *DirTree) error {
 		if !isDir {
 			entryType = GetFileTypeByName(entry.Name())
 		}
-		dirTree.Children = append(dirTree.Children, DirTree{
+		dirTree.Children = append(dirTree.Children, &DirTree{
 			Name:        entry.Name(),
 			Path:        entryPath,
 			IsDir:       isDir,
