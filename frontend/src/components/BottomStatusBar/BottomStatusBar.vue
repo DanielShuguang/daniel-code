@@ -2,18 +2,19 @@
 import { useBottomToolStore } from '@/store'
 import { defineComponent, h } from 'vue'
 import { bottomTools } from './data'
+import { computed } from 'vue'
 
 export default defineComponent({
   setup() {
     const bottomStore = useBottomToolStore()
 
-    const leftTools = bottomTools.filter(el => el.position === 'left')
-    const rightTools = bottomTools.filter(el => el.position === 'right')
+    const leftTools = computed(() => bottomTools.filter(el => el.position === 'left'))
+    const rightTools = computed(() => bottomTools.filter(el => el.position === 'right'))
 
     return () => (
       <footer class="bottom-toolbar">
-        <div class="left-container">{leftTools.map(el => h(el.component))}</div>
-        <div class="right-container">{rightTools.map(el => h(el.component))}</div>
+        <div class="left-container">{leftTools.value.map(el => h(el.component))}</div>
+        <div class="right-container">{rightTools.value.map(el => h(el.component))}</div>
       </footer>
     )
   }

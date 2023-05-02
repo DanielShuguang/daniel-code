@@ -4,7 +4,7 @@ import { useFileSystemStore, useProjectSystemStore } from '@/store'
 import { logger } from '@/utils/logger'
 import { ModifyFileContent, OpenFileByDialog, OpenFolderByDialog } from 'backend/core/App'
 import { isFileInfo } from '@/utils/type-check'
-import { EventsEmit } from 'runtime'
+import { EventsEmit, Quit } from 'runtime'
 
 export const fileCommandHandlers = () => {
   const projectStore = useProjectSystemStore()
@@ -65,4 +65,5 @@ export const fileCommandHandlers = () => {
       })
     })
   })
+  commandSerivce.registerCommand('topmenu-exit', Quit)
 }
