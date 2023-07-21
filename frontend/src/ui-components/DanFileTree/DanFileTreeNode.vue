@@ -12,8 +12,8 @@ withDefaults(
   { treeDeep: 1 }
 )
 
-const handleClickNode = inject(clickNodeFnKey)!
-const handleDoubleClickNode = inject(doubleClickFileFnKey)!
+const handleClickNode = inject(clickNodeFnKey)
+const handleDoubleClickNode = inject(doubleClickFileFnKey)
 </script>
 
 <script lang="ts">
@@ -25,8 +25,8 @@ export default {
 <template>
   <div
     class="dan-file-tree-node"
-    @click.stop="handleClickNode(treeNode)"
-    @dblclick="!treeNode.isDir && handleDoubleClickNode(treeNode)"
+    @click.stop="handleClickNode?.(treeNode)"
+    @dblclick="!treeNode.isDir && handleDoubleClickNode?.(treeNode)"
   >
     <div class="file-node-content">
       <div class="indent" :style="{ paddingLeft: 8 * treeDeep + 'px' }">

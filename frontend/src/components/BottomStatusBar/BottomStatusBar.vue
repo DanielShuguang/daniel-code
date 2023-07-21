@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { bottomTools } from './data'
+import { computed } from 'vue'
 
-const leftTools = bottomTools.filter(el => el.position === 'left')
-const rightTools = bottomTools.filter(el => el.position === 'right')
+const leftTools = computed(() => bottomTools.filter(el => el.position === 'left'))
+const rightTools = computed(() => bottomTools.filter(el => el.position === 'right'))
 </script>
 
 <template>
