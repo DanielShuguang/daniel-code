@@ -1,86 +1,67 @@
-<script lang="tsx">
+<script lang="ts" setup>
 import { usePluginStore } from '@/store'
 import { plugins } from './data'
 import { Plugin } from './types'
 import DanSplitLine from '@/ui-components/DanSplitLine.vue'
-import { defineComponent, h, ref } from 'vue'
-import classNames from 'classnames'
-import { isString } from 'lodash-es'
-import DynamicComponent from '../DynamicComponent.vue'
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const defaultWidth = 300
-    const barWidth = ref(defaultWidth)
+const defaultWidth = 300
+const barWidth = ref(defaultWidth)
 
-    const pluginStore = usePluginStore()
+const pluginStore = usePluginStore()
 
-    const getPluginTitle = (plugin: Plugin) => {
-      const list = [plugin.title]
-      if (plugin.shortcut) {
-        list.push(`(${plugin.shortcut})`)
-      }
-      return list.join('')
-    }
-
-    const handleSplitChange = (offset: number) => {
-      barWidth.value += offset
-    }
-
-    const handleClickPlugin = (plugin: Plugin) => {
-      pluginStore.changeActivePlugin(plugin)
-    }
-
-    const render = () => {
-      const target = plugins.find(p => pluginStore.activePlugin?.pluginKey === p.pluginKey)
-      if (target) {
-        return isString(target.component) ? (
-          <DynamicComponent name={target.component} />
-        ) : (
-          h(target.component)
-        )
-      }
-      return null
-    }
-
-    return () => (
-      <div class="plugin-toolbar" data-code-plugin>
-        <div class="content">
-          <ul class="actions-container">
-            {plugins.map(p => (
-              <li
-                class={classNames('action-item', {
-                  active: pluginStore.activePlugin?.pluginKey === p.pluginKey
-                })}
-                key={p.title}
-                title={getPluginTitle(p)}
-                onClick={_ => handleClickPlugin(p)}
-              >
-                <a class={classNames('icon', p.icon)}></a>
-                {p.badge ? (
-                  <div class="badge">
-                    <div class="badge-content"></div>
-                  </div>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-          <div class="editor-action-bar"></div>
-        </div>
-
-        <div class="sidebar" style={{ width: barWidth.value + 'px' }}>
-          {render()}
-          <DanSplitLine
-            defaultVector={{ x: defaultWidth - 4, y: 0 }}
-            onChange={handleSplitChange}
-            onResetClick={() => (barWidth.value = defaultWidth)}
-          />
-        </div>
-      </div>
-    )
+const getPluginTitle = (plugin: Plugin) => {
+  const list = [plugin.title]
+  if (plugin.shortcut) {
+    list.push(`(${plugin.shortcut})`)
   }
-})
+  return list.join('')
+}
+
+const handleSplitChange = (offset: number) => {
+  barWidth.value += offset
+}
+
+const handleClickPlugin = (plugin: Plugin) => {
+  pluginStore.changeActivePlugin(plugin)
+}
+
+const getCurrentComponent = () => {
+  const target = plugins.find(p => pluginStore.activePlugin?.pluginKey === p.pluginKey)
+  return target?.component
+}
 </script>
+
+<template>
+  <div class="plugin-toolbar" data-code-plugin>
+    <div class="content">
+      <ul class="actions-container">
+        <li
+          v-for="p in plugins"
+          :class="['action-item', { active: pluginStore.activePlugin?.pluginKey === p.pluginKey }]"
+          :key="p.title"
+          :title="getPluginTitle(p)"
+          @click="handleClickPlugin(p)"
+        >
+          <a :class="['icon', p.icon]"></a>
+          <div v-if="p.badge" class="badge">
+            <div class="badge-content"></div>
+          </div>
+        </li>
+      </ul>
+      <div class="editor-action-bar"></div>
+    </div>
+
+    <div class="sidebar" :style="{ width: barWidth + 'px' }">
+      <component :is="getCurrentComponent()" />
+      <DanSplitLine
+        :default-vector="{ x: defaultWidth - 4, y: 0 }"
+        @change="handleSplitChange"
+        @reset-click="barWidth = defaultWidth"
+      />
+    </div>
+  </div>
+</template>
 
 <style scoped lang="scss">
 .plugin-toolbar {

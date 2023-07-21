@@ -1,24 +1,20 @@
-<script lang="tsx">
-import { useBottomToolStore } from '@/store'
-import { defineComponent, h } from 'vue'
+<script lang="ts" setup>
 import { bottomTools } from './data'
 
-export default defineComponent({
-  setup() {
-    const bottomStore = useBottomToolStore()
-
-    const leftTools = bottomTools.filter(el => el.position === 'left')
-    const rightTools = bottomTools.filter(el => el.position === 'right')
-
-    return () => (
-      <footer class="bottom-toolbar">
-        <div class="left-container">{leftTools.map(el => h(el.component))}</div>
-        <div class="right-container">{rightTools.map(el => h(el.component))}</div>
-      </footer>
-    )
-  }
-})
+const leftTools = bottomTools.filter(el => el.position === 'left')
+const rightTools = bottomTools.filter(el => el.position === 'right')
 </script>
+
+<template>
+  <footer class="bottom-toolbar">
+    <div class="left-container">
+      <component v-for="el in leftTools" :key="el.key" :is="el.component" />
+    </div>
+    <div class="right-container">
+      <component v-for="el in rightTools" :key="el.key" :is="el.component" />
+    </div>
+  </footer>
+</template>
 
 <style lang="scss" scoped>
 .bottom-toolbar {

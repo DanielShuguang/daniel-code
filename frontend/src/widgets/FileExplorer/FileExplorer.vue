@@ -44,12 +44,6 @@ const loadFolderDetails = async (folder: FileTreeNode) => {
 }
 </script>
 
-<script lang="ts">
-export default {
-  name: 'file-explorer'
-}
-</script>
-
 <template>
   <div class="file-explorer">
     <h3 class="project-name title">{{ projectStore.currentProject?.name }}</h3>
