@@ -17,7 +17,7 @@
     "keymaster": "^1.6.2",
     "lodash": "npm:lodash-es@^4.17.21",
     "lodash-es": "^4.17.21",
-    "monaco-editor": "^0.34.1",
+    "monaco-editor": "^0.40.0",
     "nanoid": "^4.0.2",
     "pinia": "2.0.0-rc.10",
     "shortcuts": "^2.0.3",
@@ -33,11 +33,11 @@
     "@vitest/coverage-c8": "^0.25.8",
     "@vue/test-utils": "^2.4.1",
     "jsdom": "^20.0.3",
-    "sass": "^1.64.0",
+    "sass": "^1.64.1",
     "typescript": "^4.9.5",
-    "vite": "^4.4.5",
+    "vite": "^4.4.6",
     "vite-plugin-monaco-editor": "^1.1.0",
     "vitest": "^0.24.5",
-    "vue-tsc": "^1.8.5"
+    "vue-tsc": "^1.8.6"
   }
 }
