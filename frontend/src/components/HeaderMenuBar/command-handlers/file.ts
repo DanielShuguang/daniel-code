@@ -65,5 +65,6 @@ export const fileCommandHandlers = () => {
       })
     })
   })
+  commandSerivce.registerCommand('topmenu-close-window', Quit)
   commandSerivce.registerCommand('topmenu-exit', Quit)
 }

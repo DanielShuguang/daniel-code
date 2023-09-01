@@ -18,9 +18,5 @@ export default defineConfig({
       runtime: path.resolve(__dirname, './wailsjs/runtime'),
       backend: path.resolve(__dirname, './wailsjs/go')
     }
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom'
   }
 })
