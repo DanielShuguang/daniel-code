@@ -1,4 +1,3 @@
-import { InjectionKey } from 'vue'
 import { FileTreeNode } from './types'
 
 export const clickNodeFnKey: InjectionKey<(node: FileTreeNode) => void> = Symbol('click-node-fn')

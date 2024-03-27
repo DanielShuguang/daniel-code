@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { provide } from 'vue'
 import { handleOpenFile } from './composition'
 import DanFileTreeNode from './DanFileTreeNode.vue'
 import { clickNodeFnKey, doubleClickFileFnKey } from './data'

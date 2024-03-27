@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { codicon } from '@/utils/codicon'
-import { inject } from 'vue'
 import { clickNodeFnKey, doubleClickFileFnKey } from './data'
 import { FileTreeNode } from './types'
 

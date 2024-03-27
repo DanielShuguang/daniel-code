@@ -1,9 +1,8 @@
 import { commandSerivce, useCommandService } from '@/commands'
 import { Nullable } from '@/types/common'
-import { useResizeObserver, useWindowSize } from '@vueuse/core'
-import { onMounted, Ref, ref, ShallowRef, watch } from 'vue'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { FileEditorOptions } from './types'
+import { ShallowRef } from 'vue'
 
 /** 自适应更新编辑区的宽高 */
 export const useResizeEditorContainer = () => {

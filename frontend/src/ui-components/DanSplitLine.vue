@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { Nullable, Vector2D } from '@/types/common'
-import { useEventListener } from '@vueuse/core'
 import { cloneDeep, debounce } from 'lodash-es'
-import { computed, CSSProperties, onMounted, ref } from 'vue'
+import { CSSProperties } from 'vue'
 
 const props = withDefaults(
   defineProps<{

@@ -5,7 +5,6 @@ import { TimeUtils } from '@/utils/time-utils'
 import { isFileInfo } from '@/utils/type-check'
 import { debounce } from 'lodash-es'
 import { EventsEmit } from 'runtime'
-import { onBeforeMount, onMounted, watch } from 'vue'
 import { plugins } from '../LeftToolbar/data'
 
 /** 响应窗口失焦、聚焦状态 */

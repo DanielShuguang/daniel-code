@@ -2,7 +2,6 @@
 import { Dict, KeyTypes } from '@/types/common'
 import { codicon } from '@/utils/codicon'
 import { isObject } from 'lodash-es'
-import { provide, readonly, ref, toRefs, useSlots, VNode, watchEffect } from 'vue'
 import DanTabPane from './DanTabPane.vue'
 import { ActiveTabKey, DestroyTabKey } from './data'
 import { TabItem } from './types'

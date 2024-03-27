@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import { useCommandService } from '@/commands'
 import { codicon } from '@/utils/codicon'
-import { useEventListener } from '@vueuse/core'
-import { computed, ref } from 'vue'
 import { useMessageEvents } from './composition'
 import MessageItem from './MessageItem.vue'
 

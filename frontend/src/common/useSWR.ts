@@ -1,7 +1,7 @@
 import { Nullable } from '@/types/common'
 import { TimeUtils } from '@/utils/time-utils'
 import { isEqual } from 'lodash-es'
-import { onMounted, ref, Ref } from 'vue'
+import { MaybeRef } from 'vue'
 
 export interface SWRInstance {
   data: Ref<any>
@@ -19,8 +19,12 @@ export interface SWROption {
 
 const cacheClient = new Map<string, SWRInstance>()
 
-export const useSWR = <R>(key: string, fn: (key: string) => Promise<R>, option?: SWROption) => {
-  const opt = ref<SWROption>({})
+export const useSWR = <R>(
+  key: string,
+  fn: (key: string) => Promise<R>,
+  option?: MaybeRef<SWROption>
+) => {
+  const opt = computed<SWROption>(() => unref(option) ?? {})
   const content: SWRInstance = {
     data: ref<Nullable<R>>(null),
     error: ref(''),
@@ -55,7 +59,6 @@ export const useSWR = <R>(key: string, fn: (key: string) => Promise<R>, option?:
   }
 
   onMounted(() => {
-    opt.value = { ...option }
     run()
   })
 

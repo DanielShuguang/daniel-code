@@ -7,7 +7,6 @@ import { isFileInfo } from '@/utils/type-check'
 import { ReadDirTree, ReadFileContent } from 'backend/core/App'
 import { cloneDeep, debounce } from 'lodash-es'
 import { EventsOff, EventsOn } from 'runtime'
-import { onUnmounted } from 'vue'
 import { FolderWatchInfo } from './types'
 
 const eventName = 'backend:folder-update'

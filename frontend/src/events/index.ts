@@ -1,5 +1,4 @@
 import { logger } from '@/utils/logger'
-import { onMounted, onUnmounted } from 'vue'
 
 export type EventTypes = {}
 

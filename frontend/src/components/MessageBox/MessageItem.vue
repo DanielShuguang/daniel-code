@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { codicon } from '@/utils/codicon'
 import { TimeUtils } from '@/utils/time-utils'
-import { onMounted } from 'vue'
 import { MessageOption } from './types'
 
 const props = defineProps<{

@@ -1,6 +1,5 @@
 import { findByText } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
-import { nextTick } from 'vue'
 import DanContextmenu from '../DanContextmenu.vue'
 import DanMenuList from '../DanMenuList.vue'
 

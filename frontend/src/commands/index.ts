@@ -1,4 +1,3 @@
-import { onMounted, onUnmounted } from 'vue'
 import { logger } from '@/utils/logger'
 import { FileCommands } from './file'
 import { MessageCommands } from './message'

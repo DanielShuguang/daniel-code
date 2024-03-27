@@ -1,6 +1,5 @@
 import { getIntRandom } from '@/utils/random'
 import { mount } from '@vue/test-utils'
-import { nextTick } from 'vue'
 import { render, fireEvent } from '@testing-library/vue'
 import DanMenuList, { DanMenuListProps } from '../DanMenuList.vue'
 

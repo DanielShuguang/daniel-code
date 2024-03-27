@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { KeyTypes } from '@/types/common'
-import { inject } from 'vue'
 import { ActiveTabKey, DestroyTabKey } from './data'
 
 defineProps<{

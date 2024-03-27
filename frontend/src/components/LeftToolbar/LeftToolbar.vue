@@ -3,7 +3,6 @@ import { usePluginStore } from '@/store'
 import { plugins } from './data'
 import { Plugin } from './types'
 import DanSplitLine from '@/ui-components/DanSplitLine.vue'
-import { ref } from 'vue'
 
 const defaultWidth = 300
 const barWidth = ref(defaultWidth)

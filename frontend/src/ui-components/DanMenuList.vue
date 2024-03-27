@@ -2,9 +2,7 @@
 import { commandSerivce } from '@/commands'
 import { Vector2D } from '@/types/common'
 import { codicon } from '@/utils/codicon'
-import { useEventListener } from '@vueuse/core'
 import { cloneDeep, debounce } from 'lodash-es'
-import { ref } from 'vue'
 import { MenuListItem } from '../components/HeaderMenuBar/types'
 
 export interface DanMenuListProps {
@@ -14,12 +12,17 @@ export interface DanMenuListProps {
   isChildMenu?: boolean
 }
 
+defineOptions({
+  name: 'DanMenuList'
+})
+
 const props = withDefaults(defineProps<DanMenuListProps>(), {
   zIndex: 10,
   isChildMenu: false
 })
 const emit = defineEmits<{
   (event: 'close'): void
+  (event: 'close-all'): void
 }>()
 
 const defaultActive = {
@@ -77,12 +80,6 @@ const showSplitLine = (index: number) => {
     return false
   }
   return true
-}
-</script>
-
-<script lang="ts">
-export default {
-  name: 'DanMenuList'
 }
 </script>
 

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useMessageStore } from '@/store'
 import { codicon } from '@/utils/codicon'
-import { computed } from 'vue'
 
 const messageStore = useMessageStore()
 
