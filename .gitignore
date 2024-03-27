@@ -2,6 +2,7 @@ build
 node_modules
 frontend/dist
 frontend/coverage
+frontend/types
 frontend/package.json.md5
 *.cov
 *.code-workspace
